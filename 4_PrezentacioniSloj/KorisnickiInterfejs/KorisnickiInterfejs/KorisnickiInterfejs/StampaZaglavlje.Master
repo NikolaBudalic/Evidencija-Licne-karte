@@ -1,0 +1,72 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="StampaZaglavlje.master.cs" Inherits="KorisnickiInterfejs.StampaZaglavlje" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+     <title>Fakultet Info</title>
+    <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+    <style type="text/css">
+ 
+        .style2
+        {
+
+            color: #000066;
+            font-size: small;
+        }
+        .style3
+        {
+            color: #000066;
+            font-size: small;
+            width: 6px;
+        }
+        .style4
+        {
+            color: #000066;
+            font-size: small;
+            width: 35px;
+        }
+        .style5
+        {
+            color: #000066;
+            font-size: small;
+            width: 4px;
+        }
+    </style>
+</head>
+<body style ="background-color:#ffffff" >
+    <form id="Form1" runat="server">
+                <center>
+                <table style="background-color:#ffffff ">
+                    <tr>
+                        <td class="style1" align="right" >
+                            <asp:Image ID="Image1" runat="server" Height="94px" 
+                                ImageUrl="~/Slike/ZnakUniverziteta.bmp" Width="98px" />
+                        </td>
+                        <td class="style4">
+                            &nbsp;</td>
+                        <td class="style2">
+                            UNIVERZITET U NOVOM SADU<br />
+                            TEHNIČKI FAKULTET &quot;MIHAJLO PUPIN&quot;<br />
+                            ZRENJANIN<br />
+                            SRBIJA</td>
+                        <td class="style4">
+                            &nbsp;</td>
+                        <td align="left">
+                            <asp:Image ID="Image2" runat="server" Height="92px" 
+                                ImageUrl="~/Slike/PupinLogo.bmp" Width="99px" CssClass="style3" />
+                        </td>
+                    </tr>
+                </table>
+                </center>
+        <div class="main">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server"/>
+        </div>
+    <div class="footer">
+       </div>
+    </form>
+</body>
+</html>
+

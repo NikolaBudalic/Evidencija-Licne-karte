@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PoslovnaPravila>
+	<Pravilo>
+		<Naziv>MaloletnoLice</Naziv>
+		<Opis>
+			Za građane mlađe od 18 godina obavezni su podaci roditelja ili staratelja.
+		</Opis>
+	</Pravilo>
+
+	<Pravilo>
+		<Naziv>JedinstvenJMBG</Naziv>
+		<Opis>
+			U sistemu nije dozvoljen unos dva građanina sa istim JMBG-om.
+		</Opis>
+	</Pravilo>
+
+	<Pravilo>
+		<Naziv>VazenjeLicneKarte</Naziv>
+		<Opis>
+			Lična karta važi 10 godina od datuma izdavanja.
+		</Opis>
+	</Pravilo>
+</PoslovnaPravila>
