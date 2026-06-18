@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ParametriLicneKarte>
+	<MinimalnaStarostBezStaratelja>18</MinimalnaStarostBezStaratelja>
+	<VazenjeLicneKarteUGodinama>10</VazenjeLicneKarteUGodinama>
+	<PodrazumevaniStatusZahteva>U obradi</PodrazumevaniStatusZahteva>
+</ParametriLicneKarte>
