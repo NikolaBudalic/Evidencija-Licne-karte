@@ -218,7 +218,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Pocetna\OAplikaciji.cshtml" />
     <Content Include="Views\Pocetna\Kontakt.cshtml" />
-    <Content Include="Views\Pocetna\Pocetna.cshtml" />
+    <Content Include="Views\Pocetna\Index.cshtml" />
     <Content Include="Views\Zahtev\Create.cshtml" />
     <Content Include="Views\Zahtev\Index.cshtml" />
     <Content Include="Views\Zahtev\Details.cshtml" />
