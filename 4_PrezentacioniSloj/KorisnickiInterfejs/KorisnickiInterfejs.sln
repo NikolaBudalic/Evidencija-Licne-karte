@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.37301.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KorisnickiInterfejs", "KorisnickiInterfejs\KorisnickiInterfejs.csproj", "{9C6311D5-C729-4739-8769-7B1A9912319D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C6311D5-C729-4739-8769-7B1A9912319D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C6311D5-C729-4739-8769-7B1A9912319D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C6311D5-C729-4739-8769-7B1A9912319D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C6311D5-C729-4739-8769-7B1A9912319D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4B188185-10CA-4568-A5A0-CC31D8C0454D}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.37301.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KlaseMapiranja", "KlaseMapiranja\KlaseMapiranja.csproj", "{37D4E977-010A-4A9D-BBE9-F6BA02227B8D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37D4E977-010A-4A9D-BBE9-F6BA02227B8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37D4E977-010A-4A9D-BBE9-F6BA02227B8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37D4E977-010A-4A9D-BBE9-F6BA02227B8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37D4E977-010A-4A9D-BBE9-F6BA02227B8D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C83D2C96-5654-41F6-9FBF-93A2E0A4D9AF}
+	EndGlobalSection
+EndGlobal

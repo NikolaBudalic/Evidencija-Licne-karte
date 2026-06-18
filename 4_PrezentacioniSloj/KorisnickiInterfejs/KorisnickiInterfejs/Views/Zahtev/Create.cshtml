@@ -1,0 +1,304 @@
+﻿@model PrezentacionaLogika.PogledModeli.ZahtevPrikazModel
+
+@{
+    ViewBag.Title = "Novi zahtev";
+}
+
+<h2>Novi zahtev za izdavanje lične karte</h2>
+<hr />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+    <div class="panel panel-primary">
+        <div class="panel-heading"><strong>Podaci građanina</strong></div>
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.Ime)
+                    @Html.TextBoxFor(m => m.Ime, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Ime, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.Prezime)
+                    @Html.TextBoxFor(m => m.Prezime, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Prezime, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.JMBG)
+                    @Html.TextBoxFor(m => m.JMBG, new { @class = "form-control", maxlength = "13" })
+                    @Html.ValidationMessageFor(m => m.JMBG, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.DatumRodjenja)
+                    @Html.TextBoxFor(m => m.DatumRodjenja, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                    @Html.ValidationMessageFor(m => m.DatumRodjenja, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.Pol)
+                    @Html.DropDownListFor(m => m.Pol, new SelectList(new[] { "M", "Ž" }), "-- Izaberite pol --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Pol, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.Drzavljanstvo)
+                    @Html.TextBoxFor(m => m.Drzavljanstvo, new { @class = "form-control", placeholder = "npr. Srpsko" })
+                    @Html.ValidationMessageFor(m => m.Drzavljanstvo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    @Html.LabelFor(m => m.AdresaPrebivalista)
+                    @Html.TextBoxFor(m => m.AdresaPrebivalista, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.AdresaPrebivalista, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3 form-group">
+                    @Html.LabelFor(m => m.KontaktTelefon)
+                    @Html.TextBoxFor(m => m.KontaktTelefon, new { @class = "form-control", placeholder = "0611234567" })
+                    @Html.ValidationMessageFor(m => m.KontaktTelefon, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3 form-group">
+                    @Html.LabelFor(m => m.Email)
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="panel panel-info">
+        <div class="panel-heading"><strong>Podaci zahteva</strong></div>
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.RazlogIzdavanja)
+                    @Html.DropDownListFor(m => m.RazlogIzdavanja, new SelectList(new[] { "Prvo izdavanje", "Zamena", "Gubitak", "Oštećenje" }), "-- Izaberite razlog --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.RazlogIzdavanja, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.TipZahteva)
+                    @Html.DropDownListFor(m => m.TipZahteva, new SelectList(new[] { "Redovan", "Hitan" }), "-- Izaberite tip --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.TipZahteva, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.MestoPodnosenja)
+                    @Html.TextBoxFor(m => m.MestoPodnosenja, new { @class = "form-control", placeholder = "npr. Beograd" })
+                    @Html.ValidationMessageFor(m => m.MestoPodnosenja, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Napomena)
+                @Html.TextAreaFor(m => m.Napomena, new { @class = "form-control", rows = "3" })
+                @Html.ValidationMessageFor(m => m.Napomena, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+    </div>
+
+    <div id="roditeljPanel" class="panel panel-warning">
+        <div class="panel-heading"><strong>Roditelj / staratelj</strong></div>
+        <div class="panel-body">
+
+            <p class="text-muted">Popunjava se samo ako je podnosilac zahteva maloletno lice.</p>
+
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.RoditeljImePrezime)
+                    @Html.TextBoxFor(m => m.RoditeljImePrezime, new { @class = "form-control" })
+                </div>
+
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.RoditeljJMBG)
+                    @Html.TextBoxFor(m => m.RoditeljJMBG, new { @class = "form-control", maxlength = "13" })
+                    @Html.ValidationMessageFor(m => m.RoditeljJMBG, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.Srodstvo)
+                    @Html.TextBoxFor(m => m.Srodstvo, new { @class = "form-control", placeholder = "npr. Otac, majka, staratelj" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.RoditeljTelefon)
+                    @Html.TextBoxFor(m => m.RoditeljTelefon, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.RoditeljTelefon, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4 form-group">
+                    @Html.LabelFor(m => m.RoditeljEmail)
+                    @Html.TextBoxFor(m => m.RoditeljEmail, new { @class = "form-control", type = "email" })
+                    @Html.ValidationMessageFor(m => m.RoditeljEmail, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4 form-group" style="padding-top:25px;">
+                    <label>
+                        @Html.CheckBoxFor(m => m.SaglasnostRoditelja)
+                        Saglasnost roditelja/staratelja
+                    </label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="panel panel-success">
+        <div class="panel-heading"><strong>Dokumentacija</strong></div>
+        <div class="panel-body">
+
+            <div class="checkbox">
+                <label>@Html.CheckBoxFor(m => m.IzvodIzMaticneKnjigeRodjenih) Izvod iz matične knjige rođenih</label>
+                @Html.ValidationMessageFor(m => m.IzvodIzMaticneKnjigeRodjenih, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="checkbox">
+                <label>@Html.CheckBoxFor(m => m.UverenjeODrzavljanstvu) Uverenje o državljanstvu</label>
+                @Html.ValidationMessageFor(m => m.UverenjeODrzavljanstvu, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="checkbox">
+                <label>@Html.CheckBoxFor(m => m.DokazOPrebivalistu) Dokaz o prebivalištu</label>
+                @Html.ValidationMessageFor(m => m.DokazOPrebivalistu, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="checkbox">
+                <label>@Html.CheckBoxFor(m => m.DokazOUplatiTakse) Dokaz o uplati takse</label>
+                @Html.ValidationMessageFor(m => m.DokazOUplatiTakse, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="checkbox">
+                <label>@Html.CheckBoxFor(m => m.StaraLicnaKarta) Stara lična karta</label>
+            </div>
+
+            <div class="checkbox">
+                <label>@Html.CheckBoxFor(m => m.Fotografija) Fotografija</label>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Sačuvaj zahtev" class="btn btn-primary btn-lg" />
+        @Html.ActionLink("Nazad na listu", "Index", null, new { @class = "btn btn-default btn-lg" })
+    </div>
+}
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        function proveriGodine() {
+            var datum = $("#DatumRodjenja").val();
+
+            if (!datum) {
+                $("#roditeljPanel").hide();
+                return;
+            }
+
+            var danas = new Date();
+            var rodjenje = new Date(datum);
+
+            var godine = danas.getFullYear() - rodjenje.getFullYear();
+
+            if (rodjenje > new Date(
+                danas.getFullYear() - godine,
+                danas.getMonth(),
+                danas.getDate())) {
+                godine--;
+            }
+
+            if (godine < 18) {
+                $("#roditeljPanel").show();
+            }
+            else {
+                $("#roditeljPanel").hide();
+
+                $("#RoditeljImePrezime").val("");
+                $("#RoditeljJMBG").val("");
+                $("#RoditeljTelefon").val("");
+                $("#RoditeljEmail").val("");
+                $("#Srodstvo").val("");
+                $("#SaglasnostRoditelja").prop("checked", false);
+            }
+        }
+
+        function samoBrojeviSaLimitom(selector, limit) {
+            $(selector).on("input", function () {
+                this.value = this.value.replace(/[^0-9]/g, '');
+
+                if (this.value.length > limit) {
+                    this.value = this.value.substring(0, limit);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            proveriGodine();
+
+            $("#DatumRodjenja").change(function () {
+                proveriGodine();
+            });
+
+            samoBrojeviSaLimitom("#JMBG", 13);
+            samoBrojeviSaLimitom("#RoditeljJMBG", 13);
+            samoBrojeviSaLimitom("#KontaktTelefon", 15);
+            samoBrojeviSaLimitom("#RoditeljTelefon", 15);
+
+            $("#JMBG").blur(function () {
+                if ($(this).val().length !== 13) {
+                    $(this).css("border", "2px solid red");
+
+                    if ($("#jmbgPoruka").length === 0) {
+                        $(this).after("<span id='jmbgPoruka' style='color:red'>JMBG mora imati 13 cifara.</span>");
+                    }
+                }
+                else {
+                    $(this).css("border", "");
+                    $("#jmbgPoruka").remove();
+                }
+            });
+
+            $("#RoditeljJMBG").blur(function () {
+                if ($(this).val() !== "" && $(this).val().length !== 13) {
+                    $(this).css("border", "2px solid red");
+
+                    if ($("#roditeljJmbgPoruka").length === 0) {
+                        $(this).after("<span id='roditeljJmbgPoruka' style='color:red'>JMBG mora imati 13 cifara.</span>");
+                    }
+                }
+                else {
+                    $(this).css("border", "");
+                    $("#roditeljJmbgPoruka").remove();
+                }
+            });
+
+            $("form").submit(function () {
+                if ($("#JMBG").val().length !== 13) {
+                    alert("JMBG mora imati 13 cifara.");
+                    return false;
+                }
+
+                return true;
+            });
+        });
+    </script>
+}

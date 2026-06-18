@@ -1,0 +1,392 @@
+USE RVS2026LicnaKartaV1;
+GO
+
+CREATE PROCEDURE DajSveGradjane
+AS
+BEGIN
+    SELECT
+        JMBG,
+        Ime,
+        Prezime,
+        DatumRodjenja,
+        Pol,
+        Drzavljanstvo,
+        AdresaPrebivalista,
+        KontaktTelefon,
+        Email,
+        BrojStareLK,
+        DatumIstekaLK
+    FROM Gradjanin;
+END
+GO
+
+CREATE PROCEDURE DajGradjaninaPoJMBG
+(
+    @JMBG char(13)
+)
+AS
+BEGIN
+    SELECT *
+    FROM Gradjanin
+    WHERE JMBG = @JMBG;
+END
+GO
+
+CREATE PROCEDURE DajGradjanePoFilteru
+(
+    @Filter nvarchar(50)
+)
+AS
+BEGIN
+    SELECT
+        JMBG,
+        Ime,
+        Prezime,
+        DatumRodjenja,
+        Pol,
+        Drzavljanstvo,
+        AdresaPrebivalista,
+        KontaktTelefon,
+        Email,
+        BrojStareLK,
+        DatumIstekaLK
+    FROM Gradjanin
+    WHERE JMBG LIKE '%' + @Filter + '%'
+       OR Ime LIKE '%' + @Filter + '%'
+       OR Prezime LIKE '%' + @Filter + '%';
+END
+GO
+
+CREATE PROCEDURE DodajGradjanina
+(
+    @JMBG char(13),
+    @Ime nvarchar(40),
+    @Prezime nvarchar(40),
+    @DatumRodjenja date,
+    @Pol nvarchar(10),
+    @Drzavljanstvo nvarchar(40),
+    @AdresaPrebivalista nvarchar(100),
+    @KontaktTelefon nvarchar(30),
+    @Email nvarchar(60),
+    @BrojStareLK nvarchar(20),
+    @DatumIstekaLK date
+)
+AS
+BEGIN
+    INSERT INTO Gradjanin
+    (JMBG, Ime, Prezime, DatumRodjenja, Pol,
+     Drzavljanstvo, AdresaPrebivalista,
+     KontaktTelefon, Email, BrojStareLK, DatumIstekaLK)
+    VALUES
+    (@JMBG, @Ime, @Prezime, @DatumRodjenja, @Pol,
+     @Drzavljanstvo, @AdresaPrebivalista,
+     @KontaktTelefon, @Email, @BrojStareLK, @DatumIstekaLK);
+END
+GO
+
+CREATE PROCEDURE IzmeniGradjanina
+(
+    @StariJMBG char(13),
+    @JMBG char(13),
+    @Ime nvarchar(40),
+    @Prezime nvarchar(40),
+    @DatumRodjenja date,
+    @Pol nvarchar(10),
+    @Drzavljanstvo nvarchar(40),
+    @AdresaPrebivalista nvarchar(100),
+    @KontaktTelefon nvarchar(30),
+    @Email nvarchar(60),
+    @BrojStareLK nvarchar(20),
+    @DatumIstekaLK date
+)
+AS
+BEGIN
+    UPDATE Gradjanin
+    SET JMBG = @JMBG,
+        Ime = @Ime,
+        Prezime = @Prezime,
+        DatumRodjenja = @DatumRodjenja,
+        Pol = @Pol,
+        Drzavljanstvo = @Drzavljanstvo,
+        AdresaPrebivalista = @AdresaPrebivalista,
+        KontaktTelefon = @KontaktTelefon,
+        Email = @Email,
+        BrojStareLK = @BrojStareLK,
+        DatumIstekaLK = @DatumIstekaLK
+    WHERE JMBG = @StariJMBG;
+END
+GO
+
+CREATE PROCEDURE ObrisiGradjanina
+(
+    @JMBG char(13)
+)
+AS
+BEGIN
+    DELETE FROM Gradjanin
+    WHERE JMBG = @JMBG;
+END
+GO
+
+CREATE PROCEDURE DajDatumRodjenjaGradjanina
+(
+    @JMBG char(13)
+)
+AS
+BEGIN
+    SELECT DatumRodjenja
+    FROM Gradjanin
+    WHERE JMBG = @JMBG;
+END
+GO
+
+CREATE PROCEDURE DajSveZahteve
+AS
+BEGIN
+    SELECT
+        z.IDZahteva,
+        z.JMBGGradjanina AS JMBG,
+        g.Ime,
+        g.Prezime,
+        z.DatumPodnosenja,
+        z.RazlogIzdavanja,
+        z.TipZahteva,
+        z.MestoPodnosenja,
+        z.StatusZahteva
+    FROM Zahtev z
+    INNER JOIN Gradjanin g
+        ON z.JMBGGradjanina = g.JMBG;
+END
+GO
+
+CREATE PROCEDURE DajZahtevePoFilteru
+(
+    @Filter nvarchar(50)
+)
+AS
+BEGIN
+    SELECT
+        z.IDZahteva,
+        z.JMBGGradjanina AS JMBG,
+        g.Ime,
+        g.Prezime,
+        z.DatumPodnosenja,
+        z.RazlogIzdavanja,
+        z.TipZahteva,
+        z.MestoPodnosenja,
+        z.StatusZahteva
+    FROM Zahtev z
+    INNER JOIN Gradjanin g
+        ON z.JMBGGradjanina = g.JMBG
+    WHERE CAST(z.IDZahteva AS nvarchar) LIKE '%' + @Filter + '%'
+       OR z.JMBGGradjanina LIKE '%' + @Filter + '%'
+       OR g.Ime LIKE '%' + @Filter + '%'
+       OR g.Prezime LIKE '%' + @Filter + '%'
+       OR z.StatusZahteva LIKE '%' + @Filter + '%';
+END
+GO
+
+CREATE PROCEDURE DajDetaljeZahtevaPoID
+(
+    @IDZahteva int
+)
+AS
+BEGIN
+    SELECT
+        z.IDZahteva,
+        z.JMBGGradjanina,
+        g.Ime,
+        g.Prezime,
+        z.DatumPodnosenja,
+        z.RazlogIzdavanja,
+        z.TipZahteva,
+        z.MestoPodnosenja,
+        z.StatusZahteva,
+        z.Napomena
+    FROM Zahtev z
+    INNER JOIN Gradjanin g
+        ON z.JMBGGradjanina = g.JMBG
+    WHERE z.IDZahteva = @IDZahteva;
+END
+GO
+
+CREATE PROCEDURE DodajRoditeljaStaratelja
+(
+    @IDZahteva int,
+    @ImePrezime nvarchar(80),
+    @JMBG char(13),
+    @Srodstvo nvarchar(30),
+    @KontaktTelefon nvarchar(30),
+    @Email nvarchar(60)
+)
+AS
+BEGIN
+    INSERT INTO RoditeljStaratelj
+    (IDZahteva, ImePrezime, JMBG, Srodstvo, KontaktTelefon, Email)
+    VALUES
+    (@IDZahteva, @ImePrezime, @JMBG, @Srodstvo, @KontaktTelefon, @Email);
+END
+GO
+
+CREATE PROCEDURE DajRoditeljaZaZahtev
+(
+    @IDZahteva int
+)
+AS
+BEGIN
+    SELECT
+        ImePrezime,
+        JMBG,
+        Srodstvo,
+        KontaktTelefon,
+        Email
+    FROM RoditeljStaratelj
+    WHERE IDZahteva = @IDZahteva;
+END
+GO
+
+CREATE PROCEDURE KreirajOsnovnuDokumentacijuZaZahtev
+(
+    @IDZahteva int,
+    @DaLiJeMaloletan bit
+)
+AS
+BEGIN
+    INSERT INTO Dokumentacija (IDZahteva, NazivDokumenta, Dostavljeno)
+    VALUES
+    (@IDZahteva, N'Izvod iz matične knjige rođenih', 0),
+    (@IDZahteva, N'Uverenje o državljanstvu', 0),
+    (@IDZahteva, N'Dokaz o prebivalištu', 0),
+    (@IDZahteva, N'Stara lična karta ako postoji', 0),
+    (@IDZahteva, N'Dokaz o uplati administrativne takse', 0),
+    (@IDZahteva, N'Fotografija', 0);
+
+    IF @DaLiJeMaloletan = 1
+    BEGIN
+        INSERT INTO Dokumentacija (IDZahteva, NazivDokumenta, Dostavljeno)
+        VALUES (@IDZahteva, N'Saglasnost roditelja / staratelja', 0);
+    END
+END
+GO
+
+CREATE PROCEDURE DajDokumentacijuZaZahtev
+(
+    @IDZahteva int
+)
+AS
+BEGIN
+    SELECT
+        IDDokumentacije,
+        NazivDokumenta,
+        Dostavljeno
+    FROM Dokumentacija
+    WHERE IDZahteva = @IDZahteva;
+END
+GO
+
+CREATE PROCEDURE AzurirajDokumentaciju
+(
+    @IDDokumentacije int,
+    @Dostavljeno bit
+)
+AS
+BEGIN
+    UPDATE Dokumentacija
+    SET Dostavljeno = @Dostavljeno
+    WHERE IDDokumentacije = @IDDokumentacije;
+END
+GO
+
+CREATE PROCEDURE DodajIstorijuStatusa
+(
+    @IDZahteva int,
+    @StariStatus nvarchar(30),
+    @NoviStatus nvarchar(30),
+    @Korisnik nvarchar(50),
+    @Napomena nvarchar(300)
+)
+AS
+BEGIN
+    INSERT INTO IstorijaStatusaZahteva
+    (IDZahteva, StariStatus, NoviStatus, DatumPromene, Korisnik, Napomena)
+    VALUES
+    (@IDZahteva, @StariStatus, @NoviStatus, GETDATE(), @Korisnik, @Napomena);
+END
+GO
+
+CREATE PROCEDURE DajIstorijuStatusaZaZahtev
+(
+    @IDZahteva int
+)
+AS
+BEGIN
+    SELECT
+        StariStatus,
+        NoviStatus,
+        DatumPromene,
+        Korisnik,
+        Napomena
+    FROM IstorijaStatusaZahteva
+    WHERE IDZahteva = @IDZahteva
+    ORDER BY DatumPromene DESC;
+END
+GO
+
+CREATE PROCEDURE DajZahtevZaStampu
+(
+    @IDZahteva int
+)
+AS
+BEGIN
+    SELECT 
+        z.IDZahteva,
+        g.JMBG,
+        g.Ime,
+        g.Prezime,
+        g.DatumRodjenja,
+        g.Pol,
+        g.Drzavljanstvo,
+        g.AdresaPrebivalista,
+        g.KontaktTelefon,
+        g.Email,
+        g.BrojStareLK,
+        g.DatumIstekaLK,
+        z.BrojNoveLK,
+        z.DatumIstekaNoveLK,
+        z.DatumPodnosenja,
+        z.RazlogIzdavanja,
+        z.TipZahteva,
+        z.MestoPodnosenja,
+        z.StatusZahteva,
+        z.Napomena
+    FROM Zahtev z
+    INNER JOIN Gradjanin g 
+        ON z.JMBGGradjanina = g.JMBG
+    WHERE z.IDZahteva = @IDZahteva;
+END
+GO
+
+CREATE PROCEDURE DajZahteveZaStampuPoStatusu
+(
+    @StatusZahteva nvarchar(30)
+)
+AS
+BEGIN
+    SELECT 
+        z.IDZahteva,
+        g.JMBG,
+        g.Ime,
+        g.Prezime,
+        z.DatumPodnosenja,
+        z.RazlogIzdavanja,
+        z.TipZahteva,
+        z.MestoPodnosenja,
+        z.StatusZahteva,
+        z.BrojNoveLK,
+        z.DatumIstekaNoveLK
+    FROM Zahtev z
+    INNER JOIN Gradjanin g 
+        ON z.JMBGGradjanina = g.JMBG
+    WHERE z.StatusZahteva = @StatusZahteva;
+END
+GO

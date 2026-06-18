@@ -1,0 +1,159 @@
+﻿@model KlasePodataka.Zahtev
+
+@{
+    ViewBag.Title = "Detalji zahteva";
+}
+
+<h2>Detalji zahteva</h2>
+
+<h3>Tehnološka obrada</h3>
+
+<table class="table">
+    <tr>
+        <th>Opis obrade</th>
+        <td>@ViewBag.OpisObrade</td>
+    </tr>
+    <tr>
+        <th>Korisnik</th>
+        <td>@ViewBag.KreiraoKorisnik</td>
+    </tr>
+    <tr>
+        <th>Datum obrade</th>
+        <td>@ViewBag.DatumKreiranja</td>
+    </tr>
+</table>
+
+<h3>Podaci građanina</h3>
+
+<table class="table">
+    <tr>
+        <th>JMBG</th>
+        <td>@Model.Gradjanin.JMBG</td>
+    </tr>
+    <tr>
+        <th>Ime i prezime</th>
+        <td>@Model.Gradjanin.Ime @Model.Gradjanin.Prezime</td>
+    </tr>
+    <tr>
+        <th>Datum rođenja</th>
+        <td>@Model.Gradjanin.DatumRodjenja.ToString("dd.MM.yyyy")</td>
+    </tr>
+    <tr>
+        <th>Adresa</th>
+        <td>@Model.Gradjanin.AdresaPrebivalista</td>
+    </tr>
+    <tr>
+        <th>Telefon</th>
+        <td>@Model.Gradjanin.KontaktTelefon</td>
+    </tr>
+</table>
+
+<h3>Podaci zahteva</h3>
+
+<table class="table">
+    <tr>
+        <th>ID zahteva</th>
+        <td>@Model.IDZahteva</td>
+    </tr>
+    <tr>
+        <th>Datum podnošenja</th>
+        <td>@Model.DatumPodnosenja.ToString("dd.MM.yyyy")</td>
+    </tr>
+    <tr>
+        <th>Razlog izdavanja</th>
+        <td>@Model.RazlogIzdavanja</td>
+    </tr>
+    <tr>
+        <th>Tip zahteva</th>
+        <td>@Model.TipZahteva</td>
+    </tr>
+    <tr>
+        <th>Mesto podnošenja</th>
+        <td>@Model.MestoPodnosenja</td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td>@Model.StatusZahteva</td>
+    </tr>
+</table>
+
+<h3>Istorija statusa zahteva</h3>
+
+@if (Model.IstorijaStatusaZahtevas != null && Model.IstorijaStatusaZahtevas.Any())
+{
+    <table class="table table-bordered">
+        <tr>
+            <th>Stari status</th>
+            <th>Novi status</th>
+            <th>Datum promene</th>
+            <th>Korisnik</th>
+            <th>Napomena</th>
+        </tr>
+
+        @foreach (var i in Model.IstorijaStatusaZahtevas.OrderByDescending(x => x.DatumPromene))
+        {
+            <tr>
+                <td>@i.StariStatus</td>
+                <td>@i.NoviStatus</td>
+                <td>@i.DatumPromene.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@i.Korisnik</td>
+                <td>@i.Napomena</td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Status zahteva još uvek nije menjan.</p>
+}
+
+<h3>Roditelj / staratelj</h3>
+
+@if (Model.RoditeljStarateljs != null && Model.RoditeljStarateljs.Any())
+{
+    <table class="table">
+        <tr>
+            <th>Ime i prezime</th>
+            <th>JMBG</th>
+            <th>Srodstvo</th>
+            <th>Telefon</th>
+            <th>Email</th>
+        </tr>
+
+        @foreach (var r in Model.RoditeljStarateljs)
+        {
+            <tr>
+                <td>@r.ImePrezime</td>
+                <td>@r.JMBG</td>
+                <td>@r.Srodstvo</td>
+                <td>@r.KontaktTelefon</td>
+                <td>@r.Email</td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Za ovaj zahtev nije evidentiran roditelj/staratelj.</p>
+}
+
+<h3>Dokumentacija</h3>
+
+<table class="table">
+    <tr>
+        <th>Naziv dokumenta</th>
+        <th>Dostavljeno</th>
+    </tr>
+
+    @foreach (var d in Model.Dokumentacijas)
+    {
+        <tr>
+            <td>@d.NazivDokumenta</td>
+            <td>@(d.Dostavljeno ? "Da" : "Ne")</td>
+        </tr>
+    }
+</table>
+
+<p>
+    @Html.ActionLink("Nazad na listu", "Index", null, new { @class = "btn btn-default" })
+</p>

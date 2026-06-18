@@ -1,0 +1,470 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="RVS2026LicnaKartaV1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Dokumentacija">
+          <Key>
+            <PropertyRef Name="IDDokumentacije" />
+          </Key>
+          <Property Name="IDDokumentacije" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDZahteva" Type="int" Nullable="false" />
+          <Property Name="NazivDokumenta" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Dostavljeno" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Gradjanin">
+          <Key>
+            <PropertyRef Name="JMBG" />
+          </Key>
+          <Property Name="JMBG" Type="char" MaxLength="13" Nullable="false" />
+          <Property Name="Ime" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="Prezime" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="DatumRodjenja" Type="date" Nullable="false" />
+          <Property Name="Pol" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Drzavljanstvo" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="AdresaPrebivalista" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="KontaktTelefon" Type="nvarchar" MaxLength="30" />
+          <Property Name="Email" Type="nvarchar" MaxLength="60" />
+          <Property Name="BrojStareLK" Type="nvarchar" MaxLength="20" />
+          <Property Name="DatumIstekaLK" Type="date" />
+        </EntityType>
+        <EntityType Name="IstorijaStatusaZahteva">
+          <Key>
+            <PropertyRef Name="IDIstorije" />
+          </Key>
+          <Property Name="IDIstorije" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDZahteva" Type="int" Nullable="false" />
+          <Property Name="StariStatus" Type="nvarchar" MaxLength="30" />
+          <Property Name="NoviStatus" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="DatumPromene" Type="datetime" Nullable="false" />
+          <Property Name="Korisnik" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Napomena" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="Korisnik">
+          <Key>
+            <PropertyRef Name="IDKorisnika" />
+          </Key>
+          <Property Name="IDKorisnika" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KorisnickoIme" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Sifra" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Ime" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="Prezime" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="Uloga" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RoditeljStaratelj">
+          <Key>
+            <PropertyRef Name="IDRoditelja" />
+          </Key>
+          <Property Name="IDRoditelja" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDZahteva" Type="int" Nullable="false" />
+          <Property Name="ImePrezime" Type="nvarchar" MaxLength="80" Nullable="false" />
+          <Property Name="JMBG" Type="char" MaxLength="13" Nullable="false" />
+          <Property Name="Srodstvo" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="KontaktTelefon" Type="nvarchar" MaxLength="30" />
+          <Property Name="Email" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Zahtev">
+          <Key>
+            <PropertyRef Name="IDZahteva" />
+          </Key>
+          <Property Name="IDZahteva" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JMBGGradjanina" Type="char" MaxLength="13" Nullable="false" />
+          <Property Name="DatumPodnosenja" Type="date" Nullable="false" />
+          <Property Name="RazlogIzdavanja" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="TipZahteva" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="MestoPodnosenja" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="StatusZahteva" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Napomena" Type="nvarchar" MaxLength="300" />
+          <Property Name="BrojNoveLK" Type="nvarchar" MaxLength="20" />
+          <Property Name="DatumIstekaNoveLK" Type="date" />
+        </EntityType>
+        <Association Name="FK_Dokumentacija_Zahtev">
+          <End Role="Zahtev" Type="Self.Zahtev" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Dokumentacija" Type="Self.Dokumentacija" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zahtev">
+              <PropertyRef Name="IDZahteva" />
+            </Principal>
+            <Dependent Role="Dokumentacija">
+              <PropertyRef Name="IDZahteva" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IstorijaStatusa_Zahtev">
+          <End Role="Zahtev" Type="Self.Zahtev" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="IstorijaStatusaZahteva" Type="Self.IstorijaStatusaZahteva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zahtev">
+              <PropertyRef Name="IDZahteva" />
+            </Principal>
+            <Dependent Role="IstorijaStatusaZahteva">
+              <PropertyRef Name="IDZahteva" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RoditeljStaratelj_Zahtev">
+          <End Role="Zahtev" Type="Self.Zahtev" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RoditeljStaratelj" Type="Self.RoditeljStaratelj" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zahtev">
+              <PropertyRef Name="IDZahteva" />
+            </Principal>
+            <Dependent Role="RoditeljStaratelj">
+              <PropertyRef Name="IDZahteva" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zahtev_Gradjanin">
+          <End Role="Gradjanin" Type="Self.Gradjanin" Multiplicity="1" />
+          <End Role="Zahtev" Type="Self.Zahtev" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gradjanin">
+              <PropertyRef Name="JMBG" />
+            </Principal>
+            <Dependent Role="Zahtev">
+              <PropertyRef Name="JMBGGradjanina" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RVS2026LicnaKartaV1ModelStoreContainer">
+          <EntitySet Name="Dokumentacija" EntityType="Self.Dokumentacija" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Gradjanin" EntityType="Self.Gradjanin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IstorijaStatusaZahteva" EntityType="Self.IstorijaStatusaZahteva" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Korisnik" EntityType="Self.Korisnik" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RoditeljStaratelj" EntityType="Self.RoditeljStaratelj" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Zahtev" EntityType="Self.Zahtev" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Dokumentacija_Zahtev" Association="Self.FK_Dokumentacija_Zahtev">
+            <End Role="Zahtev" EntitySet="Zahtev" />
+            <End Role="Dokumentacija" EntitySet="Dokumentacija" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IstorijaStatusa_Zahtev" Association="Self.FK_IstorijaStatusa_Zahtev">
+            <End Role="Zahtev" EntitySet="Zahtev" />
+            <End Role="IstorijaStatusaZahteva" EntitySet="IstorijaStatusaZahteva" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RoditeljStaratelj_Zahtev" Association="Self.FK_RoditeljStaratelj_Zahtev">
+            <End Role="Zahtev" EntitySet="Zahtev" />
+            <End Role="RoditeljStaratelj" EntitySet="RoditeljStaratelj" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zahtev_Gradjanin" Association="Self.FK_Zahtev_Gradjanin">
+            <End Role="Gradjanin" EntitySet="Gradjanin" />
+            <End Role="Zahtev" EntitySet="Zahtev" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RVS2026LicnaKartaV1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Dokumentacija">
+          <Key>
+            <PropertyRef Name="IDDokumentacije" />
+          </Key>
+          <Property Name="IDDokumentacije" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDZahteva" Type="Int32" Nullable="false" />
+          <Property Name="NazivDokumenta" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Dostavljeno" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Zahtev" Relationship="Self.FK_Dokumentacija_Zahtev" FromRole="Dokumentacija" ToRole="Zahtev" />
+        </EntityType>
+        <EntityType Name="Gradjanin">
+          <Key>
+            <PropertyRef Name="JMBG" />
+          </Key>
+          <Property Name="JMBG" Type="String" MaxLength="13" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Ime" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Prezime" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DatumRodjenja" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Pol" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Drzavljanstvo" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AdresaPrebivalista" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="KontaktTelefon" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="BrojStareLK" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DatumIstekaLK" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Zahtevs" Relationship="Self.FK_Zahtev_Gradjanin" FromRole="Gradjanin" ToRole="Zahtev" />
+        </EntityType>
+        <EntityType Name="IstorijaStatusaZahteva">
+          <Key>
+            <PropertyRef Name="IDIstorije" />
+          </Key>
+          <Property Name="IDIstorije" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDZahteva" Type="Int32" Nullable="false" />
+          <Property Name="StariStatus" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="NoviStatus" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DatumPromene" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Korisnik" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Napomena" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Zahtev" Relationship="Self.FK_IstorijaStatusa_Zahtev" FromRole="IstorijaStatusaZahteva" ToRole="Zahtev" />
+        </EntityType>
+        <EntityType Name="Korisnik">
+          <Key>
+            <PropertyRef Name="IDKorisnika" />
+          </Key>
+          <Property Name="IDKorisnika" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KorisnickoIme" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Sifra" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Ime" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Prezime" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Uloga" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RoditeljStaratelj">
+          <Key>
+            <PropertyRef Name="IDRoditelja" />
+          </Key>
+          <Property Name="IDRoditelja" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDZahteva" Type="Int32" Nullable="false" />
+          <Property Name="ImePrezime" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="JMBG" Type="String" MaxLength="13" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Srodstvo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="KontaktTelefon" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Zahtev" Relationship="Self.FK_RoditeljStaratelj_Zahtev" FromRole="RoditeljStaratelj" ToRole="Zahtev" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Zahtev">
+          <Key>
+            <PropertyRef Name="IDZahteva" />
+          </Key>
+          <Property Name="IDZahteva" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JMBGGradjanina" Type="String" MaxLength="13" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="DatumPodnosenja" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="RazlogIzdavanja" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TipZahteva" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MestoPodnosenja" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StatusZahteva" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Napomena" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="BrojNoveLK" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DatumIstekaNoveLK" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Dokumentacijas" Relationship="Self.FK_Dokumentacija_Zahtev" FromRole="Zahtev" ToRole="Dokumentacija" />
+          <NavigationProperty Name="Gradjanin" Relationship="Self.FK_Zahtev_Gradjanin" FromRole="Zahtev" ToRole="Gradjanin" />
+          <NavigationProperty Name="IstorijaStatusaZahtevas" Relationship="Self.FK_IstorijaStatusa_Zahtev" FromRole="Zahtev" ToRole="IstorijaStatusaZahteva" />
+          <NavigationProperty Name="RoditeljStarateljs" Relationship="Self.FK_RoditeljStaratelj_Zahtev" FromRole="Zahtev" ToRole="RoditeljStaratelj" />
+        </EntityType>
+        <Association Name="FK_Dokumentacija_Zahtev">
+          <End Role="Zahtev" Type="Self.Zahtev" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Dokumentacija" Type="Self.Dokumentacija" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zahtev">
+              <PropertyRef Name="IDZahteva" />
+            </Principal>
+            <Dependent Role="Dokumentacija">
+              <PropertyRef Name="IDZahteva" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zahtev_Gradjanin">
+          <End Role="Gradjanin" Type="Self.Gradjanin" Multiplicity="1" />
+          <End Role="Zahtev" Type="Self.Zahtev" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gradjanin">
+              <PropertyRef Name="JMBG" />
+            </Principal>
+            <Dependent Role="Zahtev">
+              <PropertyRef Name="JMBGGradjanina" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IstorijaStatusa_Zahtev">
+          <End Role="Zahtev" Type="Self.Zahtev" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="IstorijaStatusaZahteva" Type="Self.IstorijaStatusaZahteva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zahtev">
+              <PropertyRef Name="IDZahteva" />
+            </Principal>
+            <Dependent Role="IstorijaStatusaZahteva">
+              <PropertyRef Name="IDZahteva" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RoditeljStaratelj_Zahtev">
+          <End Role="Zahtev" Type="Self.Zahtev" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RoditeljStaratelj" Type="Self.RoditeljStaratelj" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zahtev">
+              <PropertyRef Name="IDZahteva" />
+            </Principal>
+            <Dependent Role="RoditeljStaratelj">
+              <PropertyRef Name="IDZahteva" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RVS2026LicnaKartaV1Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Dokumentacijas" EntityType="Self.Dokumentacija" />
+          <EntitySet Name="Gradjanins" EntityType="Self.Gradjanin" />
+          <EntitySet Name="IstorijaStatusaZahtevas" EntityType="Self.IstorijaStatusaZahteva" />
+          <EntitySet Name="Korisniks" EntityType="Self.Korisnik" />
+          <EntitySet Name="RoditeljStarateljs" EntityType="Self.RoditeljStaratelj" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="Zahtevs" EntityType="Self.Zahtev" />
+          <AssociationSet Name="FK_Dokumentacija_Zahtev" Association="Self.FK_Dokumentacija_Zahtev">
+            <End Role="Zahtev" EntitySet="Zahtevs" />
+            <End Role="Dokumentacija" EntitySet="Dokumentacijas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zahtev_Gradjanin" Association="Self.FK_Zahtev_Gradjanin">
+            <End Role="Gradjanin" EntitySet="Gradjanins" />
+            <End Role="Zahtev" EntitySet="Zahtevs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IstorijaStatusa_Zahtev" Association="Self.FK_IstorijaStatusa_Zahtev">
+            <End Role="Zahtev" EntitySet="Zahtevs" />
+            <End Role="IstorijaStatusaZahteva" EntitySet="IstorijaStatusaZahtevas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RoditeljStaratelj_Zahtev" Association="Self.FK_RoditeljStaratelj_Zahtev">
+            <End Role="Zahtev" EntitySet="Zahtevs" />
+            <End Role="RoditeljStaratelj" EntitySet="RoditeljStarateljs" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RVS2026LicnaKartaV1ModelStoreContainer" CdmEntityContainer="RVS2026LicnaKartaV1Entities">
+          <EntitySetMapping Name="Dokumentacijas">
+            <EntityTypeMapping TypeName="RVS2026LicnaKartaV1Model.Dokumentacija">
+              <MappingFragment StoreEntitySet="Dokumentacija">
+                <ScalarProperty Name="IDDokumentacije" ColumnName="IDDokumentacije" />
+                <ScalarProperty Name="IDZahteva" ColumnName="IDZahteva" />
+                <ScalarProperty Name="NazivDokumenta" ColumnName="NazivDokumenta" />
+                <ScalarProperty Name="Dostavljeno" ColumnName="Dostavljeno" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Gradjanins">
+            <EntityTypeMapping TypeName="RVS2026LicnaKartaV1Model.Gradjanin">
+              <MappingFragment StoreEntitySet="Gradjanin">
+                <ScalarProperty Name="JMBG" ColumnName="JMBG" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+                <ScalarProperty Name="DatumRodjenja" ColumnName="DatumRodjenja" />
+                <ScalarProperty Name="Pol" ColumnName="Pol" />
+                <ScalarProperty Name="Drzavljanstvo" ColumnName="Drzavljanstvo" />
+                <ScalarProperty Name="AdresaPrebivalista" ColumnName="AdresaPrebivalista" />
+                <ScalarProperty Name="KontaktTelefon" ColumnName="KontaktTelefon" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="BrojStareLK" ColumnName="BrojStareLK" />
+                <ScalarProperty Name="DatumIstekaLK" ColumnName="DatumIstekaLK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IstorijaStatusaZahtevas">
+            <EntityTypeMapping TypeName="RVS2026LicnaKartaV1Model.IstorijaStatusaZahteva">
+              <MappingFragment StoreEntitySet="IstorijaStatusaZahteva">
+                <ScalarProperty Name="IDIstorije" ColumnName="IDIstorije" />
+                <ScalarProperty Name="IDZahteva" ColumnName="IDZahteva" />
+                <ScalarProperty Name="StariStatus" ColumnName="StariStatus" />
+                <ScalarProperty Name="NoviStatus" ColumnName="NoviStatus" />
+                <ScalarProperty Name="DatumPromene" ColumnName="DatumPromene" />
+                <ScalarProperty Name="Korisnik" ColumnName="Korisnik" />
+                <ScalarProperty Name="Napomena" ColumnName="Napomena" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Korisniks">
+            <EntityTypeMapping TypeName="RVS2026LicnaKartaV1Model.Korisnik">
+              <MappingFragment StoreEntitySet="Korisnik">
+                <ScalarProperty Name="IDKorisnika" ColumnName="IDKorisnika" />
+                <ScalarProperty Name="KorisnickoIme" ColumnName="KorisnickoIme" />
+                <ScalarProperty Name="Sifra" ColumnName="Sifra" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+                <ScalarProperty Name="Uloga" ColumnName="Uloga" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoditeljStarateljs">
+            <EntityTypeMapping TypeName="RVS2026LicnaKartaV1Model.RoditeljStaratelj">
+              <MappingFragment StoreEntitySet="RoditeljStaratelj">
+                <ScalarProperty Name="IDRoditelja" ColumnName="IDRoditelja" />
+                <ScalarProperty Name="IDZahteva" ColumnName="IDZahteva" />
+                <ScalarProperty Name="ImePrezime" ColumnName="ImePrezime" />
+                <ScalarProperty Name="JMBG" ColumnName="JMBG" />
+                <ScalarProperty Name="Srodstvo" ColumnName="Srodstvo" />
+                <ScalarProperty Name="KontaktTelefon" ColumnName="KontaktTelefon" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="RVS2026LicnaKartaV1Model.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Zahtevs">
+            <EntityTypeMapping TypeName="RVS2026LicnaKartaV1Model.Zahtev">
+              <MappingFragment StoreEntitySet="Zahtev">
+                <ScalarProperty Name="IDZahteva" ColumnName="IDZahteva" />
+                <ScalarProperty Name="JMBGGradjanina" ColumnName="JMBGGradjanina" />
+                <ScalarProperty Name="DatumPodnosenja" ColumnName="DatumPodnosenja" />
+                <ScalarProperty Name="RazlogIzdavanja" ColumnName="RazlogIzdavanja" />
+                <ScalarProperty Name="TipZahteva" ColumnName="TipZahteva" />
+                <ScalarProperty Name="MestoPodnosenja" ColumnName="MestoPodnosenja" />
+                <ScalarProperty Name="StatusZahteva" ColumnName="StatusZahteva" />
+                <ScalarProperty Name="Napomena" ColumnName="Napomena" />
+                <ScalarProperty Name="BrojNoveLK" ColumnName="BrojNoveLK" />
+                <ScalarProperty Name="DatumIstekaNoveLK" ColumnName="DatumIstekaNoveLK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

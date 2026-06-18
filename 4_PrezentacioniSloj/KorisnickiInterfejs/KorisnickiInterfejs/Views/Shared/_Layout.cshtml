@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Sistem za izdavanje ličnih karata</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                @Html.ActionLink("Sistem za izdavanje ličnih karata", "Index", "Zahtev", null, new { @class = "navbar-brand" })
+            </div>
+
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Zahtevi", "Index", "Zahtev")</li>
+                    <li>@Html.ActionLink("Novi zahtev", "Create", "Zahtev")</li>
+                    <li>
+                        <a href="@System.Configuration.ConfigurationManager.AppSettings["RestApiUrl"]"
+                           target="_blank"
+                           class="btn btn-default">
+                            REST API
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    @if (Session["IDKorisnika"] != null)
+                    {
+                        <li><a href="#">@Session["Ime"] @Session["Prezime"] (@Session["Uloga"])</a></li>
+                        <li>@Html.ActionLink("Odjava", "Odjava", "Account")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Prijava", "Prijava", "Account")</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Sistem za izdavanje ličnih karata</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

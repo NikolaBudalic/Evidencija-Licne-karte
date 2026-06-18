@@ -1,0 +1,286 @@
+USE RVS2026LicnaKartaV1;
+GO
+
+-------------------------------------------------
+-- ADMINISTRATOR
+-------------------------------------------------
+
+CREATE TABLE Korisnik
+(
+    IDKorisnika int IDENTITY(1,1) PRIMARY KEY,
+    KorisnickoIme nvarchar(30) NOT NULL,
+    Lozinka nvarchar(30) NOT NULL,
+    Uloga nvarchar(20) NOT NULL
+);
+GO
+
+INSERT INTO Korisnik
+(KorisnickoIme, Lozinka, Uloga)
+VALUES
+('admin', 'admin123', 'Administrator');
+GO
+
+-------------------------------------------------
+-- GRAĐANI
+-------------------------------------------------
+
+INSERT INTO Gradjanin
+(
+    JMBG,
+    Ime,
+    Prezime,
+    DatumRodjenja,
+    Pol,
+    Drzavljanstvo,
+    AdresaPrebivalista,
+    KontaktTelefon,
+    Email,
+    BrojStareLK,
+    DatumIstekaLK
+)
+VALUES
+(
+    '1205990123456',
+    N'Marko',
+    N'Petrović',
+    '1990-05-12',
+    N'Muski',
+    N'Republika Srbija',
+    N'Bulevar kralja Aleksandra 25, Beograd',
+    '0641234567',
+    'marko.petrovic@gmail.com',
+    'LK102030',
+    '2025-05-12'
+);
+
+INSERT INTO Gradjanin
+(
+    JMBG,
+    Ime,
+    Prezime,
+    DatumRodjenja,
+    Pol,
+    Drzavljanstvo,
+    AdresaPrebivalista,
+    KontaktTelefon,
+    Email,
+    BrojStareLK,
+    DatumIstekaLK
+)
+VALUES
+(
+    '1505010123456',
+    N'Luka',
+    N'Jovanović',
+    '2010-05-15',
+    N'Muski',
+    N'Republika Srbija',
+    N'Cara Dušana 10, Novi Sad',
+    '0659876543',
+    'luka.jovanovic@gmail.com',
+    NULL,
+    NULL
+);
+
+INSERT INTO Gradjanin
+(
+    JMBG,
+    Ime,
+    Prezime,
+    DatumRodjenja,
+    Pol,
+    Drzavljanstvo,
+    AdresaPrebivalista,
+    KontaktTelefon,
+    Email,
+    BrojStareLK,
+    DatumIstekaLK
+)
+VALUES
+(
+    '2307995123456',
+    N'Jelena',
+    N'Marković',
+    '1995-07-23',
+    N'Zenski',
+    N'Republika Srbija',
+    N'Kej oslobođenja 18, Zemun',
+    '063555111',
+    'jelena.markovic@gmail.com',
+    'LK556677',
+    '2024-11-01'
+);
+GO
+
+-------------------------------------------------
+-- ZAHTEVI
+-------------------------------------------------
+
+INSERT INTO Zahtev
+(
+    JMBGGradjanina,
+    DatumPodnosenja,
+    RazlogIzdavanja,
+    TipZahteva,
+    MestoPodnosenja,
+    StatusZahteva,
+    Napomena,
+    BrojNoveLK,
+    DatumIstekaNoveLK
+)
+VALUES
+(
+    '1205990123456',
+    GETDATE(),
+    N'Istekla lična karta',
+    N'Redovan',
+    N'Beograd',
+    N'Odobren',
+    N'Sva dokumentacija dostavljena.',
+    'LK900001',
+    DATEADD(YEAR, 10, GETDATE())
+);
+
+INSERT INTO Zahtev
+(
+    JMBGGradjanina,
+    DatumPodnosenja,
+    RazlogIzdavanja,
+    TipZahteva,
+    MestoPodnosenja,
+    StatusZahteva,
+    Napomena,
+    BrojNoveLK,
+    DatumIstekaNoveLK
+)
+VALUES
+(
+    '1505010123456',
+    GETDATE(),
+    N'Prvo izdavanje',
+    N'Redovan',
+    N'Novi Sad',
+    N'Na proveri',
+    N'Čeka se saglasnost roditelja.',
+    NULL,
+    NULL
+);
+
+INSERT INTO Zahtev
+(
+    JMBGGradjanina,
+    DatumPodnosenja,
+    RazlogIzdavanja,
+    TipZahteva,
+    MestoPodnosenja,
+    StatusZahteva,
+    Napomena,
+    BrojNoveLK,
+    DatumIstekaNoveLK
+)
+VALUES
+(
+    '2307995123456',
+    GETDATE(),
+    N'Gubitak lične karte',
+    N'Hitan',
+    N'Zemun',
+    N'U obradi',
+    N'Potrebna dodatna provera.',
+    NULL,
+    NULL
+);
+GO
+
+-------------------------------------------------
+-- RODITELJ / STARATELJ
+-------------------------------------------------
+
+INSERT INTO RoditeljStaratelj
+(
+    IDZahteva,
+    ImePrezime,
+    JMBG,
+    Srodstvo,
+    KontaktTelefon,
+    Email
+)
+VALUES
+(
+    2,
+    N'Milan Jovanović',
+    '0101980123456',
+    N'Otac',
+    '064222333',
+    'milan.jovanovic@gmail.com'
+);
+GO
+
+-------------------------------------------------
+-- DOKUMENTACIJA
+-------------------------------------------------
+
+INSERT INTO Dokumentacija
+(IDZahteva, NazivDokumenta, Dostavljeno)
+VALUES
+(1, N'Izvod iz matične knjige rođenih', 1),
+(1, N'Uverenje o državljanstvu', 1),
+(1, N'Dokaz o prebivalištu', 1),
+(1, N'Fotografija', 1);
+
+INSERT INTO Dokumentacija
+(IDZahteva, NazivDokumenta, Dostavljeno)
+VALUES
+(2, N'Izvod iz matične knjige rođenih', 1),
+(2, N'Saglasnost roditelja / staratelja', 0),
+(2, N'Fotografija', 1);
+
+INSERT INTO Dokumentacija
+(IDZahteva, NazivDokumenta, Dostavljeno)
+VALUES
+(3, N'Potvrda o gubitku dokumenta', 1),
+(3, N'Dokaz o uplati administrativne takse', 0);
+GO
+
+-------------------------------------------------
+-- ISTORIJA STATUSA
+-------------------------------------------------
+
+INSERT INTO IstorijaStatusaZahteva
+(
+    IDZahteva,
+    StariStatus,
+    NoviStatus,
+    DatumPromene,
+    Korisnik,
+    Napomena
+)
+VALUES
+(
+    1,
+    N'U obradi',
+    N'Odobren',
+    GETDATE(),
+    N'admin',
+    N'Sva dokumentacija je dostavljena.'
+);
+
+INSERT INTO IstorijaStatusaZahteva
+(
+    IDZahteva,
+    StariStatus,
+    NoviStatus,
+    DatumPromene,
+    Korisnik,
+    Napomena
+)
+VALUES
+(
+    2,
+    N'U obradi',
+    N'Na proveri',
+    GETDATE(),
+    N'admin',
+    N'Čeka se saglasnost roditelja.'
+);
+GO

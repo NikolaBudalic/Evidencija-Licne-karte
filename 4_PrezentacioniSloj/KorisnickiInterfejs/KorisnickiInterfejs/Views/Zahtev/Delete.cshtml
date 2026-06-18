@@ -1,0 +1,56 @@
+﻿@model KlasePodataka.Zahtev
+
+@{
+    ViewBag.Title = "Brisanje zahteva";
+}
+
+<div class="page-header">
+    <h2>Brisanje zahteva #@Model.IDZahteva</h2>
+</div>
+
+<div class="alert alert-warning">
+    <strong>Upozorenje:</strong> Da li ste sigurni da želite da obrišete ovaj zahtev?
+</div>
+
+<div class="panel panel-danger">
+    <div class="panel-heading">
+        <strong>Podaci o zahtevu</strong>
+    </div>
+
+    <div class="panel-body">
+        <table class="table table-bordered">
+            <tr>
+                <th>ID zahteva</th>
+                <td>@Model.IDZahteva</td>
+            </tr>
+            <tr>
+                <th>Građanin</th>
+                <td>@Model.Gradjanin.Ime @Model.Gradjanin.Prezime</td>
+            </tr>
+            <tr>
+                <th>JMBG</th>
+                <td>@Model.JMBGGradjanina</td>
+            </tr>
+            <tr>
+                <th>Razlog izdavanja</th>
+                <td>@Model.RazlogIzdavanja</td>
+            </tr>
+            <tr>
+                <th>Tip zahteva</th>
+                <td>@Model.TipZahteva</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>@Model.StatusZahteva</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <input type="submit" value="Potvrdi brisanje" class="btn btn-danger btn-lg" />
+    @Html.ActionLink("Odustani", "Index", null, new { @class = "btn btn-default btn-lg" })
+}
