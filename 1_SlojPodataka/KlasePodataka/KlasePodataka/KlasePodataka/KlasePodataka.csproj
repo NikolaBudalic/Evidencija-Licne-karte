@@ -67,7 +67,6 @@
       <DependentUpon>LicnaKartaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="LicnaKartaModel.Designer.cs" />
-    <Compile Include="LicnaKartaModel1.Designer.cs" />
     <Compile Include="LicnaKartaModel2.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

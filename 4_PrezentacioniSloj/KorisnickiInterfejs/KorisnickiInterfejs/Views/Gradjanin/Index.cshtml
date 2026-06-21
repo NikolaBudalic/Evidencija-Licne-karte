@@ -1,0 +1,50 @@
+﻿@model IEnumerable<KlasePodataka.Gradjanin>
+
+@{
+    ViewBag.Title = "Pregled građana";
+}
+
+<div class="page-header">
+    <h2>Pregled građana</h2>
+</div>
+<p>
+    @Html.ActionLink("Novi građanin", "Create", "Gradjanin", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>JMBG</th>
+            <th>Ime</th>
+            <th>Prezime</th>
+            <th>Datum rođenja</th>
+            <th>Pol</th>
+            <th>Državljanstvo</th>
+            <th>Adresa prebivališta</th>
+            <th>Kontakt telefon</th>
+            <th>Akcije</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.JMBG</td>
+                <td>@item.Ime</td>
+                <td>@item.Prezime</td>
+                <td>@item.DatumRodjenja.ToString("dd.MM.yyyy")</td>
+                <td>@item.Pol</td>
+                <td>@item.Drzavljanstvo</td>
+                <td>@item.AdresaPrebivalista</td>
+                <td>@item.KontaktTelefon</td>
+                <td>
+                    <a href="@Url.Action("Details", "Gradjanin", new { id = item.JMBG })"
+                       class="btn btn-info btn-sm">
+                        Detalji
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -174,6 +174,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controlers\GradjaninController.cs" />
     <Compile Include="Controlers\NalogKontroler.cs" />
     <Compile Include="Controlers\PocetnaKontroler.cs" />
     <Compile Include="Controlers\ZahtevKontroler.cs" />
@@ -227,6 +228,9 @@
     <Content Include="Views\Nalog\Prijava.cshtml" />
     <Content Include="Views\Zahtev\Stampa.cshtml" />
     <Content Include="Views\Zahtev\ParametarskaStampa.cshtml" />
+    <Content Include="Views\Gradjanin\Index.cshtml" />
+    <Content Include="Views\Gradjanin\Details.cshtml" />
+    <Content Include="Views\Gradjanin\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
