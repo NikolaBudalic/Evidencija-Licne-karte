@@ -2,107 +2,151 @@
 
 ## Opis projekta
 
-Sistem za izdavanje ličnih karata predstavlja višeslojnu web aplikaciju razvijenu u okviru seminarskog rada iz predmeta Razvoj višeslojnih softverskih sistema.
+Aplikacija predstavlja informacioni sistem za evidenciju i obradu zahteva za izdavanje ličnih karata. Sistem omogućava unos i pregled građana, kreiranje i obradu zahteva, evidenciju dokumentacije, vođenje istorije statusa zahteva, štampu obrazaca i pristup podacima putem REST servisa.
 
-Aplikacija omogućava evidenciju građana, podnošenje zahteva za izdavanje lične karte, obradu zahteva i upravljanje pratećom dokumentacijom. Sistem je implementiran korišćenjem ASP.NET tehnologije i organizovan je kroz više logičkih slojeva radi lakšeg održavanja i proširenja.
-
----
-
-## Funkcionalnosti
-
-- Prijava korisnika
-- Evidencija građana
-- Evidencija zahteva za izdavanje lične karte
-- Unos, pregled, izmena i brisanje podataka
-- Obrada zahteva
-- Štampa zahteva
-- REST servis za razmenu podataka
-- Entity Framework pristup podacima
-- Validacija korisničkog unosa
-- Primena poslovnih pravila sistema
-
----
-
-## Poslovno pravilo
-
-Sistem implementira sledeće poslovno pravilo:
-
-> Ukoliko je građanin mlađi od 18 godina, obavezno je evidentiranje podataka roditelja ili staratelja prilikom podnošenja zahteva za izdavanje lične karte.
-
-Parametri poslovnih pravila čuvaju se u XML dokumentima radi jednostavnije izmene bez promene izvornog koda.
-
----
-
-## Arhitektura sistema
-
-Aplikacija je organizovana kroz četiri osnovna sloja:
-
-### 1. Sloj podataka
-
-- SQL Server baza podataka
-- Stored procedure
-- DBUtils klase
-- Entity Framework modeli
-
-### 2. Sloj poslovne logike
-
-- ObradaZahtevaKlasa
-- PravilaLicneKarteKlasa
-- ValidacijaGradjaninaKlasa
-- Interfejsi poslovne logike
-
-### 3. Sloj servisa
-
-- GradjaniServis (ASMX Web Service)
-- GradjaniApi (REST servis)
-- Klase mapiranja
-
-### 4. Prezentacioni sloj
-
-- ASP.NET Web Forms
-- ViewModel pristup
-- Validacija korisničkog unosa
+Projekat je realizovan kao višeslojna aplikacija u okviru predmeta Razvoj višeslojnog softvera.
 
 ---
 
 ## Korišćene tehnologije
 
+- ASP.NET MVC (.NET Framework)
 - C#
-- ASP.NET Web Forms
-- ADO.NET
-- Entity Framework
 - SQL Server
-- XML
-- JavaScript
-- REST
-- ASMX Web Services
-- Git
-- GitHub
-- Visual Studio
+- Entity Framework Database First
+- Repository Pattern
+- REST API (ASP.NET Web API)
+- Bootstrap
+- HTML, CSS i JavaScript
 
 ---
 
-## Struktura projekta
+## Arhitektura sistema
 
-```text
-1_SlojPodataka
-2_SlojPoslovneLogike
-3_SlojServisa
-4_PrezentacioniSloj
+Projekat je organizovan kroz četiri sloja:
+
+### 1. Sloj podataka (KlasePodataka)
+
+Sadrži:
+
+- Entity Framework model
+- EDMX model baze podataka
+- Entitetske klase:
+  - Gradjanin
+  - Zahtev
+  - Dokumentacija
+  - RoditeljStaratelj
+  - IstorijaStatusaZahteva
+  - Korisnik
+
+### 2. Sloj poslovne logike (DBUtils)
+
+Sadrži:
+
+- Repository Pattern
+- Interfejse repozitorijuma
+- Implementacije repozitorijuma
+- Poslovna pravila sistema
+- Tehnološke klase
+
+Primer:
+
+- IGradjaninRepozitorijum
+- GradjaninRepozitorijum
+- IZahtevRepozitorijum
+- ZahtevRepozitorijum
+
+### 3. Sloj servisa (RESTServis)
+
+Implementiran je REST servis za rad sa zahtevima.
+
+Podržane operacije:
+
+- GET
+- POST
+- PUT
+- DELETE
+
+Primer:
+
+```
+GET /api/zahtevi
 ```
 
+Servis vraća podatke u JSON formatu.
+
+### 4. Prezentacioni sloj (KorisnickiInterfejs)
+
+ASP.NET MVC aplikacija koja omogućava:
+
+- prijavu korisnika
+- pregled građana
+- unos građana
+- pregled zahteva
+- unos zahteva
+- izmenu zahteva
+- brisanje zahteva
+- prikaz detalja
+- štampu pojedinačnog zahteva
+- parametarsku štampu
+
 ---
 
-## Objektno-orijentisani principi
+## Poslovna pravila
 
-U projektu su primenjeni:
+### Maloletna lica
 
-- Klase i objekti
-- Enkapsulacija
-- Interfejsi
-- Apstrakcija
-- Dependency Injection
-- Višeslojna arhitektura
+Ukoliko građanin nije punoletan, sistem zahteva unos podataka o roditelju ili staratelju.
+
+### Aktivni zahtevi
+
+Građanin ne može imati više aktivnih zahteva za izdavanje lične karte.
+
+---
+
+## Funkcionalnosti sistema
+
+- Evidencija građana
+- Evidencija zahteva
+- Evidencija dokumentacije
+- Istorija statusa zahteva
+- Validacija podataka
+- REST API
+- Repository Pattern
+- Entity Framework
+- Štampa zahteva
+- Parametarska štampa
+
+---
+
+## Baza podataka
+
+Glavne tabele:
+
+- Gradjanin
+- Zahtev
+- Dokumentacija
+- RoditeljStaratelj
+- IstorijaStatusaZahteva
+- Korisnik
+
+Relacije između tabela realizovane su putem Entity Framework Database First pristupa.
+
+---
+
+## Pokretanje projekta
+
+1. Kreirati bazu podataka u SQL Server-u.
+2. Izvršiti SQL skripte iz foldera:
+
+```
+KOMPLETNA BAZA PODATAKA
+```
+
+3. Podesiti connection string.
+4. Pokrenuti:
+   - RESTServis
+   - KorisnickiInterfejs
 
 ---
 
@@ -110,6 +154,6 @@ U projektu su primenjeni:
 
 Nikola Budalić
 
-Softversko inženjerstvo
+Fakultet tehničkih nauka „Mihajlo Pupin“ Zrenjanin
 
-Tehnički fakultet „Mihajlo Pupin“ Zrenjanin
+Predmet: Razvoj višeslojnog softvera
