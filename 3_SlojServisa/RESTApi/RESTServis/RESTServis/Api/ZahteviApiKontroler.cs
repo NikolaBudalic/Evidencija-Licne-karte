@@ -6,13 +6,13 @@ using KlasePodataka;
 namespace RESTServis.Controllers.Api
 {
     [RoutePrefix("api/zahtevi")]
-    public class ZahteviController : ApiController
+    public class ZahteviApiKontroler : ApiController
     {
         private readonly RVS2026LicnaKartaV1Entities db = new RVS2026LicnaKartaV1Entities();
 
         [HttpGet]
         [Route("")]
-        public IHttpActionResult Get()
+        public IHttpActionResult DajSveZahteve()
         {
             var zahtevi = db.Zahtevs
                 .Include(z => z.Gradjanin)
@@ -35,7 +35,7 @@ namespace RESTServis.Controllers.Api
 
         [HttpGet]
         [Route("{id:int}")]
-        public IHttpActionResult Get(int id)
+        public IHttpActionResult DajZahtevPoId(int id)
         {
             var zahtev = db.Zahtevs
                 .Include(z => z.Gradjanin)
@@ -65,7 +65,7 @@ namespace RESTServis.Controllers.Api
 
         [HttpPost]
         [Route("")]
-        public IHttpActionResult Post(Zahtev zahtev)
+        public IHttpActionResult DodajZahtev(Zahtev zahtev)
         {
             if (zahtev == null)
             {
@@ -80,7 +80,7 @@ namespace RESTServis.Controllers.Api
 
         [HttpPut]
         [Route("{id:int}")]
-        public IHttpActionResult Put(int id, Zahtev zahtev)
+        public IHttpActionResult IzmeniZahtev(int id, Zahtev zahtev)
         {
             Zahtev postojeci = db.Zahtevs.Find(id);
 
@@ -102,7 +102,7 @@ namespace RESTServis.Controllers.Api
 
         [HttpDelete]
         [Route("{id:int}")]
-        public IHttpActionResult Delete(int id)
+        public IHttpActionResult ObrisiZahtev(int id)
         {
             Zahtev zahtev = db.Zahtevs.Find(id);
 

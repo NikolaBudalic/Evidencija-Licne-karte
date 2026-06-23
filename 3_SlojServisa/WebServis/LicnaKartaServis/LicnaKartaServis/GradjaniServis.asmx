@@ -1,1 +1,0 @@
-﻿<%@ WebService Language="C#" CodeBehind="GradjaniServis.asmx.cs" Class="LicnaKartaServis.GradjaniServis" %>

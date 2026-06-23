@@ -4,13 +4,16 @@ using KlasePodataka;
 
 namespace DBUtils.Repozitorijumi
 {
-    public class GradjaninRepozitorijum : IGradjaninRepozitorijum
+    public class GradjaninRepozitorijum : OsnovnaTehnoloskaKlasa, IGradjaninRepozitorijum
     {
         private readonly RVS2026LicnaKartaV1Entities db;
 
         public GradjaninRepozitorijum()
         {
             db = new RVS2026LicnaKartaV1Entities();
+
+            KreiraoKorisnik = "Sistem";
+            StatusObrade = "Rad sa zahtevima";
         }
 
         public List<Gradjanin> DajSve()

@@ -5,13 +5,16 @@ using KlasePodataka;
 
 namespace DBUtils.Repozitorijumi
 {
-    public class ZahtevRepozitorijum : IZahtevRepozitorijum
+    public class ZahtevRepozitorijum : OsnovnaTehnoloskaKlasa, IZahtevRepozitorijum
     {
         private readonly RVS2026LicnaKartaV1Entities db;
 
         public ZahtevRepozitorijum()
         {
             db = new RVS2026LicnaKartaV1Entities();
+
+            KreiraoKorisnik = "Sistem";
+            StatusObrade = "Rad sa zahtevima";
         }
 
         public List<Zahtev> DajSve()
