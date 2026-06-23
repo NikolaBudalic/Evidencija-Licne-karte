@@ -7,6 +7,7 @@
 <div class="page-header">
     <h2>Pregled građana</h2>
 </div>
+
 <p>
     @Html.ActionLink("Novi građanin", "Create", "Gradjanin", null, new { @class = "btn btn-primary" })
 </p>
@@ -22,7 +23,7 @@
             <th>Državljanstvo</th>
             <th>Adresa prebivališta</th>
             <th>Kontakt telefon</th>
-            <th>Akcije</th>
+            <th style="width:220px;">Akcije</th>
         </tr>
     </thead>
 
@@ -38,11 +39,19 @@
                 <td>@item.Drzavljanstvo</td>
                 <td>@item.AdresaPrebivalista</td>
                 <td>@item.KontaktTelefon</td>
-                <td>
-                    <a href="@Url.Action("Details", "Gradjanin", new { id = item.JMBG })"
-                       class="btn btn-info btn-sm">
-                        Detalji
-                    </a>
+
+                <td style="white-space:nowrap;">
+                    @Html.ActionLink("Detalji", "Details", "Gradjanin",
+                        new { id = item.JMBG },
+                        new { @class = "btn btn-info btn-sm" })
+
+                    @Html.ActionLink("Izmeni", "Edit", "Gradjanin",
+                        new { id = item.JMBG },
+                        new { @class = "btn btn-warning btn-sm" })
+
+                    @Html.ActionLink("Obriši", "Delete", "Gradjanin",
+                        new { id = item.JMBG },
+                        new { @class = "btn btn-danger btn-sm" })
                 </td>
             </tr>
         }

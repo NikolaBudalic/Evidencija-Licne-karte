@@ -1,0 +1,97 @@
+﻿@model KlasePodataka.Gradjanin
+
+@{
+    ViewBag.Title = "Izmena građanina";
+}
+
+<h2>Izmena građanina</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Podaci o građaninu
+        </div>
+
+        <div class="panel-body">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            @Html.HiddenFor(model => model.JMBG)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.JMBG)
+                @Html.TextBoxFor(model => model.JMBG, new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.JMBG, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Ime)
+                @Html.TextBoxFor(model => model.Ime, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Ime, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Prezime)
+                @Html.TextBoxFor(model => model.Prezime, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Prezime, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DatumRodjenja, "Datum rođenja")
+                @Html.TextBoxFor(model => model.DatumRodjenja, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                @Html.ValidationMessageFor(model => model.DatumRodjenja, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Pol)
+                @Html.DropDownListFor(model => model.Pol,
+                    new SelectList(new[] { "Muški", "Ženski" }, Model.Pol),
+                    "-- Izaberite pol --",
+                    new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Pol, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Drzavljanstvo, "Državljanstvo")
+                @Html.TextBoxFor(model => model.Drzavljanstvo, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Drzavljanstvo, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.AdresaPrebivalista, "Adresa prebivališta")
+                @Html.TextBoxFor(model => model.AdresaPrebivalista, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AdresaPrebivalista, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.KontaktTelefon, "Kontakt telefon")
+                @Html.TextBoxFor(model => model.KontaktTelefon, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.KontaktTelefon, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, "E-mail")
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BrojStareLK, "Broj stare lične karte")
+                @Html.TextBoxFor(model => model.BrojStareLK, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BrojStareLK, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DatumIstekaLK, "Datum isteka lične karte")
+                @Html.TextBoxFor(model => model.DatumIstekaLK, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                @Html.ValidationMessageFor(model => model.DatumIstekaLK, "", new { @class = "text-danger" })
+            </div>
+
+            <button type="submit" class="btn btn-primary">Sačuvaj izmene</button>
+            @Html.ActionLink("Nazad na listu", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    </div>
+}
