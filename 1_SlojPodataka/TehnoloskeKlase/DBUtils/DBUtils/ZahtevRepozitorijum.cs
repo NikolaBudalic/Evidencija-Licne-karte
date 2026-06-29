@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using KlasePodataka;
@@ -8,17 +9,21 @@ namespace DBUtils.Repozitorijumi
     public class ZahtevRepozitorijum : OsnovnaTehnoloskaKlasa, IZahtevRepozitorijum
     {
         private readonly RVS2026LicnaKartaV1Entities db;
+        private readonly TehnoloskaObradaZahteva tehnoloskaObradaZahteva;
 
         public ZahtevRepozitorijum()
         {
             db = new RVS2026LicnaKartaV1Entities();
+            tehnoloskaObradaZahteva = new TehnoloskaObradaZahteva();
 
             KreiraoKorisnik = "Sistem";
-            StatusObrade = "Rad sa zahtevima";
+            StatusObrade = "Rad sa zahtevima preko repozitorijuma i DBUtils sloja";
         }
 
         public List<Zahtev> DajSve()
         {
+            DataTable podaciIzProcedure = tehnoloskaObradaZahteva.DajSveZahteve();
+
             return db.Zahtevs
                 .Include(z => z.Gradjanin)
                 .ToList();
@@ -26,6 +31,8 @@ namespace DBUtils.Repozitorijumi
 
         public Zahtev DajPoId(int id)
         {
+            DataTable podaciIzProcedure = tehnoloskaObradaZahteva.DajZahtevPoId(id);
+
             return db.Zahtevs
                 .Include(z => z.Gradjanin)
                 .Include(z => z.RoditeljStarateljs)
@@ -60,6 +67,11 @@ namespace DBUtils.Repozitorijumi
                 db.Zahtevs.Remove(zahtev);
                 db.SaveChanges();
             }
+        }
+
+        public override string DajOpisObrade()
+        {
+            return "Repozitorijum za rad sa zahtevima koristi Entity Framework i DBUtils tehnološki sloj.";
         }
     }
 }

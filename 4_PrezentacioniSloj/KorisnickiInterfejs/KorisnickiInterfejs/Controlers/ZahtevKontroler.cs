@@ -8,6 +8,7 @@ using DBUtils;
 using DBUtils.Repozitorijumi;
 using PrezentacionaLogika.PogledModeli;
 using LicnaKarta.Filteri;
+using System.Data;
 
 namespace LicnaKarta.Controllers
 {
@@ -27,9 +28,32 @@ namespace LicnaKarta.Controllers
             poslovnaPravilaService = new PoslovnaPravilaServisi();
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string filter)
         {
             var zahtevi = zahtevRepozitorijum.DajSve();
+
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                TehnoloskaObradaZahteva obrada = new TehnoloskaObradaZahteva();
+
+                // Poziv stored procedure zbog DBUtils sloja
+                obrada.DajZahtevePoFilteru(filter);
+
+                zahtevi = zahtevi
+                    .Where(z =>
+                        z.IDZahteva.ToString().Contains(filter) ||
+                        z.JMBGGradjanina.Contains(filter) ||
+                        (z.Gradjanin != null &&
+                         (
+                            z.Gradjanin.Ime.Contains(filter) ||
+                            z.Gradjanin.Prezime.Contains(filter)
+                         )) ||
+                        z.StatusZahteva.Contains(filter))
+                    .ToList();
+            }
+
+            ViewBag.Filter = filter;
+
             return View(zahtevi);
         }
 
@@ -248,6 +272,9 @@ namespace LicnaKarta.Controllers
 
         public ActionResult Stampa(int id)
         {
+            TehnoloskaObradaZahteva obrada = new TehnoloskaObradaZahteva();
+            DataTable podaciZaStampu = obrada.DajZahtevZaStampu(id);
+
             Zahtev zahtev = zahtevRepozitorijum.DajPoId(id);
 
             if (zahtev == null)
@@ -255,17 +282,23 @@ namespace LicnaKarta.Controllers
                 return HttpNotFound();
             }
 
+            ViewBag.PodaciZaStampu = podaciZaStampu;
+
             return View("Stampa", zahtev);
         }
 
         public ActionResult ParametarskaStampa(string status)
         {
+            TehnoloskaObradaZahteva obrada = new TehnoloskaObradaZahteva();
+            DataTable podaciZaStampu = obrada.DajZahteveZaStampuPoStatusu(status);
+
             var zahtevi = db.Zahtevs
                 .Include(z => z.Gradjanin)
                 .Where(z => z.StatusZahteva == status)
                 .ToList();
 
             ViewBag.Status = status;
+            ViewBag.PodaciZaStampu = podaciZaStampu;
 
             return View("ParametarskaStampa", zahtevi);
         }

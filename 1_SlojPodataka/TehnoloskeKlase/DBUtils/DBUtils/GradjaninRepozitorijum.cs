@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using KlasePodataka;
 
@@ -7,22 +8,28 @@ namespace DBUtils.Repozitorijumi
     public class GradjaninRepozitorijum : OsnovnaTehnoloskaKlasa, IGradjaninRepozitorijum
     {
         private readonly RVS2026LicnaKartaV1Entities db;
+        private readonly TehnoloskaObradaGradjana tehnoloskaObradaGradjana;
 
         public GradjaninRepozitorijum()
         {
             db = new RVS2026LicnaKartaV1Entities();
+            tehnoloskaObradaGradjana = new TehnoloskaObradaGradjana();
 
             KreiraoKorisnik = "Sistem";
-            StatusObrade = "Rad sa zahtevima";
+            StatusObrade = "Rad sa građanima preko repozitorijuma i DBUtils sloja";
         }
 
         public List<Gradjanin> DajSve()
         {
+            DataTable podaciIzProcedure = tehnoloskaObradaGradjana.DajSveGradjane();
+
             return db.Gradjanins.ToList();
         }
 
         public Gradjanin DajPoJMBG(string jmbg)
         {
+            DataTable podaciIzProcedure = tehnoloskaObradaGradjana.DajGradjaninaPoJMBG(jmbg);
+
             return db.Gradjanins.FirstOrDefault(g => g.JMBG == jmbg);
         }
 
@@ -64,6 +71,11 @@ namespace DBUtils.Repozitorijumi
                 db.Gradjanins.Remove(gradjanin);
                 db.SaveChanges();
             }
+        }
+
+        public override string DajOpisObrade()
+        {
+            return "Repozitorijum za rad sa građanima koristi Entity Framework i DBUtils tehnološki sloj.";
         }
     }
 }

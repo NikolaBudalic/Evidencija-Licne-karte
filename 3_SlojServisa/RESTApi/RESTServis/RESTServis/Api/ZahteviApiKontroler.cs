@@ -2,13 +2,15 @@
 using System.Web.Http;
 using System.Data.Entity;
 using KlasePodataka;
+using KlaseMapiranja;
 
 namespace RESTServis.Controllers.Api
 {
     [RoutePrefix("api/zahtevi")]
-    public class ZahteviApiKontroler : ApiController
+    public class ZahteviController : ApiController
     {
         private readonly RVS2026LicnaKartaV1Entities db = new RVS2026LicnaKartaV1Entities();
+        private readonly MapiranjeLicneKarteKlasa mapiranje = new MapiranjeLicneKarteKlasa();
 
         [HttpGet]
         [Route("")]
@@ -16,6 +18,7 @@ namespace RESTServis.Controllers.Api
         {
             var zahtevi = db.Zahtevs
                 .Include(z => z.Gradjanin)
+                .ToList()
                 .Select(z => new
                 {
                     z.IDZahteva,
@@ -24,8 +27,10 @@ namespace RESTServis.Controllers.Api
                     Prezime = z.Gradjanin.Prezime,
                     z.DatumPodnosenja,
                     z.RazlogIzdavanja,
+                    TipZahtevaZaServis = mapiranje.DajTipZahtevaZaServis(z.RazlogIzdavanja),
                     z.TipZahteva,
                     z.MestoPodnosenja,
+                    StatusZaServis = mapiranje.DajStatusZaServis(z.StatusZahteva),
                     z.StatusZahteva
                 })
                 .ToList();
@@ -40,6 +45,7 @@ namespace RESTServis.Controllers.Api
             var zahtev = db.Zahtevs
                 .Include(z => z.Gradjanin)
                 .Where(z => z.IDZahteva == id)
+                .ToList()
                 .Select(z => new
                 {
                     z.IDZahteva,
@@ -48,8 +54,10 @@ namespace RESTServis.Controllers.Api
                     Prezime = z.Gradjanin.Prezime,
                     z.DatumPodnosenja,
                     z.RazlogIzdavanja,
+                    TipZahtevaZaServis = mapiranje.DajTipZahtevaZaServis(z.RazlogIzdavanja),
                     z.TipZahteva,
                     z.MestoPodnosenja,
+                    StatusZaServis = mapiranje.DajStatusZaServis(z.StatusZahteva),
                     z.StatusZahteva,
                     z.Napomena
                 })

@@ -10,15 +10,21 @@ namespace DBUtils
 
         public string StatusObrade { get; set; }
 
-        public OsnovnaTehnoloskaKlasa()
+        protected OsnovnaTehnoloskaKlasa()
         {
             DatumKreiranja = DateTime.Now;
+            KreiraoKorisnik = "Sistem";
             StatusObrade = "Aktivan";
         }
 
         public virtual string DajOpisObrade()
         {
             return "Osnovna tehnološka obrada podataka u sistemu.";
+        }
+
+        protected void EvidentirajObradu(string status)
+        {
+            StatusObrade = status;
         }
     }
 }

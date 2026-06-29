@@ -8,21 +8,80 @@
     <h2>Pregled zahteva za izdavanje lične karte</h2>
 </div>
 
-<div class="well">
-    @Html.ActionLink("Novi zahtev", "Create", "Zahtev", null, new { @class = "btn btn-primary" })
+<div class="panel panel-default">
+    <div class="panel-body">
 
-    @Html.ActionLink(
-        "Štampa odobrenih",
-        "ParametarskaStampa",
-        new { status = "Odobren" },
-        new { @class = "btn btn-default", target = "_blank" })
+        <div class="row">
 
-    @Html.ActionLink(
-        "Štampa podnetih",
-        "ParametarskaStampa",
-        new { status = "Podnet" },
-        new { @class = "btn btn-default", target = "_blank" })
+            <div class="col-md-8">
+
+                @using (Html.BeginForm("Index", "Zahtev", FormMethod.Get))
+                {
+                    <div class="form-inline">
+
+                        <input type="text"
+                               name="filter"
+                               class="form-control"
+                               style="width:390px;"
+                               placeholder="Pretraži po ID-u, JMBG-u, imenu, prezimenu ili statusu..."
+                               value="@ViewBag.Filter" />
+
+                        <button class="btn btn-primary" type="submit">
+                            <span class="glyphicon glyphicon-search"></span>
+                            Pretraži
+                        </button>
+
+                        @Html.ActionLink(
+                            "Prikaži sve",
+                            "Index",
+                            "Zahtev",
+                            null,
+                            new { @class = "btn btn-default" })
+
+                    </div>
+                }
+
+            </div>
+
+            <div class="col-md-4 text-right">
+
+                @Html.ActionLink(
+                    "Novi zahtev",
+                    "Create",
+                    "Zahtev",
+                    null,
+                    new { @class = "btn btn-success" })
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        <div>
+            @Html.ActionLink(
+                "Štampa odobrenih",
+                "ParametarskaStampa",
+                new { status = "Odobren" },
+                new { @class = "btn btn-default", target = "_blank" })
+
+            @Html.ActionLink(
+                "Štampa podnetih",
+                "ParametarskaStampa",
+                new { status = "Podnet" },
+                new { @class = "btn btn-default", target = "_blank" })
+        </div>
+
+    </div>
 </div>
+
+@if (!String.IsNullOrWhiteSpace(Convert.ToString(ViewBag.Filter)))
+{
+    <div class="alert alert-info">
+        Prikazani su rezultati pretrage za pojam:
+        <strong>@ViewBag.Filter</strong>
+    </div>
+}
 
 <table class="table table-bordered table-striped table-hover">
     <thead>
@@ -40,31 +99,49 @@
     </thead>
 
     <tbody>
-        @foreach (var item in Model)
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.IDZahteva</td>
+                    <td>@item.JMBGGradjanina</td>
+                    <td>
+                        @if (item.Gradjanin != null)
+                        {
+                            @(item.Gradjanin.Ime + " " + item.Gradjanin.Prezime)
+                        }
+                    </td>
+                    <td>@item.DatumPodnosenja.ToString("dd.MM.yyyy")</td>
+                    <td>@item.RazlogIzdavanja</td>
+                    <td>@item.TipZahteva</td>
+                    <td>@item.MestoPodnosenja</td>
+                    <td>@item.StatusZahteva</td>
+                    <td style="white-space:nowrap;">
+                        <a href="@Url.Action("Details", new { id = item.IDZahteva })"
+                           class="btn btn-info btn-sm">Detalji</a>
+
+                        <a href="@Url.Action("Edit", new { id = item.IDZahteva })"
+                           class="btn btn-warning btn-sm">Izmeni</a>
+
+                        <a href="@Url.Action("Stampa", new { id = item.IDZahteva })"
+                           target="_blank"
+                           class="btn btn-default btn-sm">Štampa</a>
+
+                        @if (Session["Uloga"] != null && Session["Uloga"].ToString() == "Administrator")
+                        {
+                            <a href="@Url.Action("Delete", new { id = item.IDZahteva })"
+                               class="btn btn-danger btn-sm">Obriši</a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td>@item.IDZahteva</td>
-                <td>@item.JMBGGradjanina</td>
-                <td>
-                    @if (item.Gradjanin != null)
-                    {
-                        @(item.Gradjanin.Ime + " " + item.Gradjanin.Prezime)
-                    }
-                </td>
-                <td>@item.DatumPodnosenja.ToString("dd.MM.yyyy")</td>
-                <td>@item.RazlogIzdavanja</td>
-                <td>@item.TipZahteva</td>
-                <td>@item.MestoPodnosenja</td>
-                <td>@item.StatusZahteva</td>
-                <td style="white-space:nowrap;">
-                    <a href="@Url.Action("Details", new { id = item.IDZahteva })" class="btn btn-info btn-sm">Detalji</a>
-                    <a href="@Url.Action("Edit", new { id = item.IDZahteva })" class="btn btn-warning btn-sm">Izmeni</a>
-                    <a href="@Url.Action("Stampa", new { id = item.IDZahteva })" target="_blank" class="btn btn-default btn-sm">Štampa</a>
-
-                    @if (Session["Uloga"] != null && Session["Uloga"].ToString() == "Administrator")
-                    {
-                        <a href="@Url.Action("Delete", new { id = item.IDZahteva })" class="btn btn-danger btn-sm">Obriši</a>
-                    }
+                <td colspan="9" class="text-center text-muted">
+                    Nema pronađenih zahteva za zadati kriterijum.
                 </td>
             </tr>
         }

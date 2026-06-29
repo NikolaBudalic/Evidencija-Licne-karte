@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
+using DBUtils;
 using DBUtils.Repozitorijumi;
 using KlasePodataka;
 using LicnaKarta.Filteri;
@@ -9,15 +11,32 @@ namespace LicnaKarta.Controllers
     public class GradjaninController : Controller
     {
         private readonly IGradjaninRepozitorijum gradjaninRepozitorijum;
+        private readonly TehnoloskaObradaGradjana tehnoloskaObradaGradjana;
 
         public GradjaninController()
         {
             gradjaninRepozitorijum = new GradjaninRepozitorijum();
+            tehnoloskaObradaGradjana = new TehnoloskaObradaGradjana();
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string filter)
         {
             var gradjani = gradjaninRepozitorijum.DajSve();
+
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                tehnoloskaObradaGradjana.DajGradjanePoFilteru(filter);
+
+                gradjani = gradjani
+                    .Where(g =>
+                        g.JMBG.Contains(filter) ||
+                        g.Ime.Contains(filter) ||
+                        g.Prezime.Contains(filter))
+                    .ToList();
+            }
+
+            ViewBag.Filter = filter;
+
             return View(gradjani);
         }
 

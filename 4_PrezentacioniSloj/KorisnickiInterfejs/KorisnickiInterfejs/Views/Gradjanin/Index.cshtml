@@ -8,9 +8,64 @@
     <h2>Pregled građana</h2>
 </div>
 
-<p>
-    @Html.ActionLink("Novi građanin", "Create", "Gradjanin", null, new { @class = "btn btn-primary" })
-</p>
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        <div class="row">
+
+            <div class="col-md-8">
+
+                @using (Html.BeginForm("Index", "Gradjanin", FormMethod.Get))
+                {
+                    <div class="form-inline">
+
+                        <input type="text"
+                               name="filter"
+                               class="form-control"
+                               style="width:360px;"
+                               placeholder="Pretraži po JMBG-u, imenu ili prezimenu..."
+                               value="@ViewBag.Filter" />
+
+                        <button class="btn btn-primary" type="submit">
+                            <span class="glyphicon glyphicon-search"></span>
+                            Pretraži
+                        </button>
+
+                        @Html.ActionLink(
+                            "Prikaži sve",
+                            "Index",
+                            "Gradjanin",
+                            null,
+                            new { @class = "btn btn-default" })
+
+                    </div>
+                }
+
+            </div>
+
+            <div class="col-md-4 text-right">
+
+                @Html.ActionLink(
+                    "Novi građanin",
+                    "Create",
+                    "Gradjanin",
+                    null,
+                    new { @class = "btn btn-success" })
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@if (!String.IsNullOrWhiteSpace(Convert.ToString(ViewBag.Filter)))
+{
+    <div class="alert alert-info">
+        Prikazani su rezultati pretrage za pojam:
+        <strong>@ViewBag.Filter</strong>
+    </div>
+}
 
 <table class="table table-bordered table-striped table-hover">
     <thead>
@@ -28,30 +83,41 @@
     </thead>
 
     <tbody>
-        @foreach (var item in Model)
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.JMBG</td>
+                    <td>@item.Ime</td>
+                    <td>@item.Prezime</td>
+                    <td>@item.DatumRodjenja.ToString("dd.MM.yyyy")</td>
+                    <td>@item.Pol</td>
+                    <td>@item.Drzavljanstvo</td>
+                    <td>@item.AdresaPrebivalista</td>
+                    <td>@item.KontaktTelefon</td>
+
+                    <td style="white-space:nowrap;">
+                        @Html.ActionLink("Detalji", "Details", "Gradjanin",
+                            new { id = item.JMBG },
+                            new { @class = "btn btn-info btn-sm" })
+
+                        @Html.ActionLink("Izmeni", "Edit", "Gradjanin",
+                            new { id = item.JMBG },
+                            new { @class = "btn btn-warning btn-sm" })
+
+                        @Html.ActionLink("Obriši", "Delete", "Gradjanin",
+                            new { id = item.JMBG },
+                            new { @class = "btn btn-danger btn-sm" })
+                    </td>
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td>@item.JMBG</td>
-                <td>@item.Ime</td>
-                <td>@item.Prezime</td>
-                <td>@item.DatumRodjenja.ToString("dd.MM.yyyy")</td>
-                <td>@item.Pol</td>
-                <td>@item.Drzavljanstvo</td>
-                <td>@item.AdresaPrebivalista</td>
-                <td>@item.KontaktTelefon</td>
-
-                <td style="white-space:nowrap;">
-                    @Html.ActionLink("Detalji", "Details", "Gradjanin",
-                        new { id = item.JMBG },
-                        new { @class = "btn btn-info btn-sm" })
-
-                    @Html.ActionLink("Izmeni", "Edit", "Gradjanin",
-                        new { id = item.JMBG },
-                        new { @class = "btn btn-warning btn-sm" })
-
-                    @Html.ActionLink("Obriši", "Delete", "Gradjanin",
-                        new { id = item.JMBG },
-                        new { @class = "btn btn-danger btn-sm" })
+                <td colspan="9" class="text-center text-muted">
+                    Nema pronađenih građana za zadati kriterijum.
                 </td>
             </tr>
         }
