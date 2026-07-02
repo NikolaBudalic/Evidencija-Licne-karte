@@ -16,7 +16,7 @@ namespace LicnaKarta
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Pocetna", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Nalog", action = "Prijava", id = UrlParameter.Optional }
             );
         }
     }

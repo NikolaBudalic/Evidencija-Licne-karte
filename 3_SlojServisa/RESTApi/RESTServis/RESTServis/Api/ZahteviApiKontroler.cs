@@ -7,10 +7,10 @@ using KlaseMapiranja;
 namespace RESTServis.Controllers.Api
 {
     [RoutePrefix("api/zahtevi")]
-    public class ZahteviController : ApiController
+    public class ZahteviApiKontroler : ApiController
     {
         private readonly RVS2026LicnaKartaV1Entities db = new RVS2026LicnaKartaV1Entities();
-        private readonly MapiranjeLicneKarteKlasa mapiranje = new MapiranjeLicneKarteKlasa();
+        private readonly MapiranjeLicneKarteKlasa mapiranjeLicneKarte = new MapiranjeLicneKarteKlasa();
 
         [HttpGet]
         [Route("")]
@@ -27,10 +27,10 @@ namespace RESTServis.Controllers.Api
                     Prezime = z.Gradjanin.Prezime,
                     z.DatumPodnosenja,
                     z.RazlogIzdavanja,
-                    TipZahtevaZaServis = mapiranje.DajTipZahtevaZaServis(z.RazlogIzdavanja),
+                    TipZahtevaZaServis = mapiranjeLicneKarte.DajTipZahtevaZaServis(z.RazlogIzdavanja),
                     z.TipZahteva,
                     z.MestoPodnosenja,
-                    StatusZaServis = mapiranje.DajStatusZaServis(z.StatusZahteva),
+                    StatusZaServis = mapiranjeLicneKarte.DajStatusZaServis(z.StatusZahteva),
                     z.StatusZahteva
                 })
                 .ToList();
@@ -54,10 +54,10 @@ namespace RESTServis.Controllers.Api
                     Prezime = z.Gradjanin.Prezime,
                     z.DatumPodnosenja,
                     z.RazlogIzdavanja,
-                    TipZahtevaZaServis = mapiranje.DajTipZahtevaZaServis(z.RazlogIzdavanja),
+                    TipZahtevaZaServis = mapiranjeLicneKarte.DajTipZahtevaZaServis(z.RazlogIzdavanja),
                     z.TipZahteva,
                     z.MestoPodnosenja,
-                    StatusZaServis = mapiranje.DajStatusZaServis(z.StatusZahteva),
+                    StatusZaServis = mapiranjeLicneKarte.DajStatusZaServis(z.StatusZahteva),
                     z.StatusZahteva,
                     z.Napomena
                 })

@@ -15,16 +15,16 @@
 
             <div class="col-md-8">
 
-                @using (Html.BeginForm("Index", "Gradjanin", FormMethod.Get))
+                @using (Html.BeginForm("Spisak", "Gradjanin", FormMethod.Get))
                 {
                     <div class="form-inline">
 
                         <input type="text"
-                               name="filter"
+                               name="pretraga"
                                class="form-control"
                                style="width:360px;"
                                placeholder="Pretraži po JMBG-u, imenu ili prezimenu..."
-                               value="@ViewBag.Filter" />
+                               value="@ViewBag.Pretraga" />
 
                         <button class="btn btn-primary" type="submit">
                             <span class="glyphicon glyphicon-search"></span>
@@ -33,7 +33,7 @@
 
                         @Html.ActionLink(
                             "Prikaži sve",
-                            "Index",
+                            "Spisak",
                             "Gradjanin",
                             null,
                             new { @class = "btn btn-default" })
@@ -47,7 +47,7 @@
 
                 @Html.ActionLink(
                     "Novi građanin",
-                    "Create",
+                    "Dodaj",
                     "Gradjanin",
                     null,
                     new { @class = "btn btn-success" })
@@ -59,11 +59,11 @@
     </div>
 </div>
 
-@if (!String.IsNullOrWhiteSpace(Convert.ToString(ViewBag.Filter)))
+@if (!String.IsNullOrWhiteSpace(Convert.ToString(ViewBag.Pretraga)))
 {
     <div class="alert alert-info">
         Prikazani su rezultati pretrage za pojam:
-        <strong>@ViewBag.Filter</strong>
+        <strong>@ViewBag.Pretraga</strong>
     </div>
 }
 
@@ -98,15 +98,15 @@
                     <td>@item.KontaktTelefon</td>
 
                     <td style="white-space:nowrap;">
-                        @Html.ActionLink("Detalji", "Details", "Gradjanin",
+                        @Html.ActionLink("Detalji", "Detalji", "Gradjanin",
                             new { id = item.JMBG },
                             new { @class = "btn btn-info btn-sm" })
 
-                        @Html.ActionLink("Izmeni", "Edit", "Gradjanin",
+                        @Html.ActionLink("Izmeni", "Izmeni", "Gradjanin",
                             new { id = item.JMBG },
                             new { @class = "btn btn-warning btn-sm" })
 
-                        @Html.ActionLink("Obriši", "Delete", "Gradjanin",
+                        @Html.ActionLink("Obriši", "Obrisi", "Gradjanin",
                             new { id = item.JMBG },
                             new { @class = "btn btn-danger btn-sm" })
                     </td>

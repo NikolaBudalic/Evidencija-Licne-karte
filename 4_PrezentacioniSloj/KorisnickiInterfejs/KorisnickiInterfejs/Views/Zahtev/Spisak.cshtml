@@ -15,16 +15,16 @@
 
             <div class="col-md-8">
 
-                @using (Html.BeginForm("Index", "Zahtev", FormMethod.Get))
+                @using (Html.BeginForm("Spisak", "Zahtev", FormMethod.Get))
                 {
                     <div class="form-inline">
 
                         <input type="text"
-                               name="filter"
+                               name="pretraga"
                                class="form-control"
                                style="width:390px;"
                                placeholder="Pretraži po ID-u, JMBG-u, imenu, prezimenu ili statusu..."
-                               value="@ViewBag.Filter" />
+                               value="@ViewBag.Pretraga" />
 
                         <button class="btn btn-primary" type="submit">
                             <span class="glyphicon glyphicon-search"></span>
@@ -33,7 +33,7 @@
 
                         @Html.ActionLink(
                             "Prikaži sve",
-                            "Index",
+                            "Spisak",
                             "Zahtev",
                             null,
                             new { @class = "btn btn-default" })
@@ -47,7 +47,7 @@
 
                 @Html.ActionLink(
                     "Novi zahtev",
-                    "Create",
+                    "Dodaj",
                     "Zahtev",
                     null,
                     new { @class = "btn btn-success" })
@@ -75,11 +75,11 @@
     </div>
 </div>
 
-@if (!String.IsNullOrWhiteSpace(Convert.ToString(ViewBag.Filter)))
+@if (!String.IsNullOrWhiteSpace(Convert.ToString(ViewBag.Pretraga)))
 {
     <div class="alert alert-info">
         Prikazani su rezultati pretrage za pojam:
-        <strong>@ViewBag.Filter</strong>
+        <strong>@ViewBag.Pretraga</strong>
     </div>
 }
 
@@ -118,10 +118,10 @@
                     <td>@item.MestoPodnosenja</td>
                     <td>@item.StatusZahteva</td>
                     <td style="white-space:nowrap;">
-                        <a href="@Url.Action("Details", new { id = item.IDZahteva })"
+                        <a href="@Url.Action("Detalji", new { id = item.IDZahteva })"
                            class="btn btn-info btn-sm">Detalji</a>
 
-                        <a href="@Url.Action("Edit", new { id = item.IDZahteva })"
+                        <a href="@Url.Action("Izmeni", new { id = item.IDZahteva })"
                            class="btn btn-warning btn-sm">Izmeni</a>
 
                         <a href="@Url.Action("Stampa", new { id = item.IDZahteva })"
@@ -130,7 +130,7 @@
 
                         @if (Session["Uloga"] != null && Session["Uloga"].ToString() == "Administrator")
                         {
-                            <a href="@Url.Action("Delete", new { id = item.IDZahteva })"
+                            <a href="@Url.Action("Obrisi", new { id = item.IDZahteva })"
                                class="btn btn-danger btn-sm">Obriši</a>
                         }
                     </td>

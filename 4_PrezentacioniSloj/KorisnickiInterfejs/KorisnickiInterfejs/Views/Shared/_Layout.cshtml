@@ -11,14 +11,14 @@
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                @Html.ActionLink("Sistem za izdavanje ličnih karata", "Index", "Zahtev", null, new { @class = "navbar-brand" })
+                @Html.ActionLink("Sistem za izdavanje ličnih karata", "Spisak", "Zahtev", null, new { @class = "navbar-brand" })
             </div>
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Zahtevi", "Index", "Zahtev")</li>
-                    <li>@Html.ActionLink("Novi zahtev", "Create", "Zahtev")</li>
-                    <li>@Html.ActionLink("Građani", "Index", "Gradjanin")</li>
+                    <li>@Html.ActionLink("Zahtevi", "Spisak", "Zahtev")</li>
+                    <li>@Html.ActionLink("Novi zahtev", "Dodaj", "Zahtev")</li>
+                    <li>@Html.ActionLink("Građani", "Spisak", "Gradjanin")</li>
                     <li>
                         <a href="@System.Configuration.ConfigurationManager.AppSettings["RestApiUrl"]"
                            target="_blank"
@@ -32,7 +32,7 @@
                     @if (Session["IDKorisnika"] != null)
                     {
                         <li><a href="#">@Session["Ime"] @Session["Prezime"] (@Session["Uloga"])</a></li>
-                        <li>@Html.ActionLink("Odjava", "Odjava", "Account")</li>
+                        <li>@Html.ActionLink("Odjava", "Odjava", "Nalog")</li>
                     }
                     else
                     {

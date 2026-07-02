@@ -63,10 +63,10 @@
     </table>
 </div>
 
-@using (Html.BeginForm("DeleteConfirmed", "Gradjanin", new { id = Model.JMBG }, FormMethod.Post))
+@using (Html.BeginForm("PotvrdiBrisanje", "Gradjanin", new { id = Model.JMBG }, FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
     <button type="submit" class="btn btn-danger">Potvrdi brisanje</button>
-    @Html.ActionLink("Odustani", "Index", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Odustani", "Spisak", null, new { @class = "btn btn-default" })
 }

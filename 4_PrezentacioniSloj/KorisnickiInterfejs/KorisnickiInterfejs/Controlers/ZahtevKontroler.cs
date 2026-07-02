@@ -18,92 +18,92 @@ namespace LicnaKarta.Controllers
         private readonly RVS2026LicnaKartaV1Entities db;
         private readonly IZahtevRepozitorijum zahtevRepozitorijum;
         private readonly IGradjaninRepozitorijum gradjaninRepozitorijum;
-        private readonly IPoslovnaPravilaServisi poslovnaPravilaService;
+        private readonly IPoslovnaPravilaServisi poslovnaPravilaServisi;
 
         public ZahtevController()
         {
             db = new RVS2026LicnaKartaV1Entities();
             zahtevRepozitorijum = new ZahtevRepozitorijum();
             gradjaninRepozitorijum = new GradjaninRepozitorijum();
-            poslovnaPravilaService = new PoslovnaPravilaServisi();
+            poslovnaPravilaServisi = new PoslovnaPravilaServisi();
         }
 
-        public ActionResult Index(string filter)
+        public ActionResult Spisak(string pretraga)
         {
             var zahtevi = zahtevRepozitorijum.DajSve();
 
-            if (!string.IsNullOrWhiteSpace(filter))
+            if (!string.IsNullOrWhiteSpace(pretraga))
             {
-                TehnoloskaObradaZahteva obrada = new TehnoloskaObradaZahteva();
+                TehnoloskaObradaZahteva tehnoloskaObrada = new TehnoloskaObradaZahteva();
 
                 // Poziv stored procedure zbog DBUtils sloja
-                obrada.DajZahtevePoFilteru(filter);
+                tehnoloskaObrada.DajZahtevePoFilteru(pretraga);
 
                 zahtevi = zahtevi
                     .Where(z =>
-                        z.IDZahteva.ToString().Contains(filter) ||
-                        z.JMBGGradjanina.Contains(filter) ||
+                        z.IDZahteva.ToString().Contains(pretraga) ||
+                        z.JMBGGradjanina.Contains(pretraga) ||
                         (z.Gradjanin != null &&
                          (
-                            z.Gradjanin.Ime.Contains(filter) ||
-                            z.Gradjanin.Prezime.Contains(filter)
+                            z.Gradjanin.Ime.Contains(pretraga) ||
+                            z.Gradjanin.Prezime.Contains(pretraga)
                          )) ||
-                        z.StatusZahteva.Contains(filter))
+                        z.StatusZahteva.Contains(pretraga))
                     .ToList();
             }
 
-            ViewBag.Filter = filter;
+            ViewBag.Filter = pretraga;
 
             return View(zahtevi);
         }
 
-        public ActionResult Create()
+        public ActionResult Dodaj()
         {
-            ZahtevPrikazModel model = new ZahtevPrikazModel
+            ZahtevPrikazModel prikazModel = new ZahtevPrikazModel
             {
                 DatumPodnosenja = DateTime.Now,
                 StatusZahteva = "Podnet",
                 DatumRodjenja = DateTime.Today
             };
 
-            return View(model);
+            return View(prikazModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ZahtevPrikazModel model)
+        public ActionResult Dodaj(ZahtevPrikazModel prikazModel)
         {
-            ValidirajZahtev(model);
+            ValidirajZahtev(prikazModel);
 
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(prikazModel);
             }
 
-            bool potrebanRoditelj = poslovnaPravilaService
-                .DaLiSuPotrebniPodaciRoditelja(model.DatumRodjenja.Value);
+            bool potrebanRoditelj = poslovnaPravilaServisi
+                .DaLiSuPotrebniPodaciRoditelja(prikazModel.DatumRodjenja.Value);
 
             using (var transakcija = db.Database.BeginTransaction())
             {
                 try
                 {
-                    Gradjanin gradjanin = gradjaninRepozitorijum.DajPoJMBG(model.JMBG);
+                    Gradjanin gradjanin = gradjaninRepozitorijum.DajPoJMBG(prikazModel.JMBG);
 
                     if (gradjanin == null)
                     {
                         gradjanin = new Gradjanin
                         {
-                            JMBG = model.JMBG,
-                            Ime = model.Ime,
-                            Prezime = model.Prezime,
-                            DatumRodjenja = model.DatumRodjenja.Value,
-                            Pol = model.Pol,
-                            Drzavljanstvo = model.Drzavljanstvo,
-                            AdresaPrebivalista = model.AdresaPrebivalista,
-                            KontaktTelefon = model.KontaktTelefon,
-                            Email = model.Email,
-                            BrojStareLK = model.BrojStareLK,
-                            DatumIstekaLK = model.DatumIstekaLK
+                            JMBG = prikazModel.JMBG,
+                            Ime = prikazModel.Ime,
+                            Prezime = prikazModel.Prezime,
+                            DatumRodjenja = prikazModel.DatumRodjenja.Value,
+                            Pol = prikazModel.Pol,
+                            Drzavljanstvo = prikazModel.Drzavljanstvo,
+                            AdresaPrebivalista = prikazModel.AdresaPrebivalista,
+                            KontaktTelefon = prikazModel.KontaktTelefon,
+                            Email = prikazModel.Email,
+                            BrojStareLK = prikazModel.BrojStareLK,
+                            DatumIstekaLK = prikazModel.DatumIstekaLK
                         };
 
                         db.Gradjanins.Add(gradjanin);
@@ -112,13 +112,13 @@ namespace LicnaKarta.Controllers
 
                     Zahtev zahtev = new Zahtev
                     {
-                        JMBGGradjanina = model.JMBG,
+                        JMBGGradjanina = prikazModel.JMBG,
                         DatumPodnosenja = DateTime.Now,
-                        RazlogIzdavanja = model.RazlogIzdavanja,
-                        TipZahteva = model.TipZahteva,
-                        MestoPodnosenja = model.MestoPodnosenja,
+                        RazlogIzdavanja = prikazModel.RazlogIzdavanja,
+                        TipZahteva = prikazModel.TipZahteva,
+                        MestoPodnosenja = prikazModel.MestoPodnosenja,
                         StatusZahteva = "Podnet",
-                        Napomena = model.Napomena
+                        Napomena = prikazModel.Napomena
                     };
 
                     db.Zahtevs.Add(zahtev);
@@ -129,34 +129,34 @@ namespace LicnaKarta.Controllers
                         RoditeljStaratelj roditelj = new RoditeljStaratelj
                         {
                             IDZahteva = zahtev.IDZahteva,
-                            ImePrezime = model.RoditeljImePrezime,
-                            JMBG = model.RoditeljJMBG,
-                            Srodstvo = model.Srodstvo,
-                            KontaktTelefon = model.RoditeljTelefon,
-                            Email = model.RoditeljEmail
+                            ImePrezime = prikazModel.RoditeljImePrezime,
+                            JMBG = prikazModel.RoditeljJMBG,
+                            Srodstvo = prikazModel.Srodstvo,
+                            KontaktTelefon = prikazModel.RoditeljTelefon,
+                            Email = prikazModel.RoditeljEmail
                         };
 
                         db.RoditeljStarateljs.Add(roditelj);
                         db.SaveChanges();
                     }
 
-                    DodajDokumentaciju(zahtev.IDZahteva, model);
+                    DodajDokumentaciju(zahtev.IDZahteva, prikazModel);
 
                     db.SaveChanges();
                     transakcija.Commit();
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Spisak");
                 }
                 catch
                 {
                     transakcija.Rollback();
                     ModelState.AddModelError("", "Došlo je do greške prilikom čuvanja zahteva.");
-                    return View(model);
+                    return View(prikazModel);
                 }
             }
         }
 
-        public ActionResult Details(int id)
+        public ActionResult Detalji(int id)
         {
             Zahtev zahtev = zahtevRepozitorijum.DajPoId(id);
 
@@ -165,7 +165,7 @@ namespace LicnaKarta.Controllers
                 return HttpNotFound();
             }
 
-            TehnoloskaObradaZahteva obrada = new TehnoloskaObradaZahteva
+            TehnoloskaObradaZahteva tehnoloskaObrada = new TehnoloskaObradaZahteva
             {
                 IDZahteva = zahtev.IDZahteva,
                 TipZahteva = zahtev.TipZahteva,
@@ -174,14 +174,14 @@ namespace LicnaKarta.Controllers
                     : "Nepoznat korisnik"
             };
 
-            ViewBag.OpisObrade = obrada.DajOpisObrade();
-            ViewBag.KreiraoKorisnik = obrada.KreiraoKorisnik;
-            ViewBag.DatumKreiranja = obrada.DatumKreiranja;
+            ViewBag.OpisObrade = tehnoloskaObrada.DajOpisObrade();
+            ViewBag.KreiraoKorisnik = tehnoloskaObrada.KreiraoKorisnik;
+            ViewBag.DatumKreiranja = tehnoloskaObrada.DatumKreiranja;
 
             return View(zahtev);
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Izmeni(int id)
         {
             Zahtev zahtev = zahtevRepozitorijum.DajPoId(id);
 
@@ -195,14 +195,14 @@ namespace LicnaKarta.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Zahtev model)
+        public ActionResult Izmeni(Zahtev prikazModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(prikazModel);
             }
 
-            Zahtev zahtev = db.Zahtevs.Find(model.IDZahteva);
+            Zahtev zahtev = db.Zahtevs.Find(prikazModel.IDZahteva);
 
             if (zahtev == null)
             {
@@ -211,19 +211,19 @@ namespace LicnaKarta.Controllers
 
             string stariStatus = zahtev.StatusZahteva;
 
-            zahtev.RazlogIzdavanja = model.RazlogIzdavanja;
-            zahtev.TipZahteva = model.TipZahteva;
-            zahtev.MestoPodnosenja = model.MestoPodnosenja;
-            zahtev.StatusZahteva = model.StatusZahteva;
-            zahtev.Napomena = model.Napomena;
+            zahtev.RazlogIzdavanja = prikazModel.RazlogIzdavanja;
+            zahtev.TipZahteva = prikazModel.TipZahteva;
+            zahtev.MestoPodnosenja = prikazModel.MestoPodnosenja;
+            zahtev.StatusZahteva = prikazModel.StatusZahteva;
+            zahtev.Napomena = prikazModel.Napomena;
 
-            if (stariStatus != model.StatusZahteva)
+            if (stariStatus != prikazModel.StatusZahteva)
             {
                 IstorijaStatusaZahteva istorija = new IstorijaStatusaZahteva
                 {
                     IDZahteva = zahtev.IDZahteva,
                     StariStatus = stariStatus,
-                    NoviStatus = model.StatusZahteva,
+                    NoviStatus = prikazModel.StatusZahteva,
                     DatumPromene = DateTime.Now,
                     Korisnik = Session["KorisnickoIme"] != null
                         ? Session["KorisnickoIme"].ToString()
@@ -236,14 +236,14 @@ namespace LicnaKarta.Controllers
 
             db.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Spisak");
         }
 
-        public ActionResult Delete(int id)
+        public ActionResult Obrisi(int id)
         {
             if (Session["Uloga"] == null || Session["Uloga"].ToString() != "Administrator")
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Spisak");
             }
 
             Zahtev zahtev = zahtevRepozitorijum.DajPoId(id);
@@ -256,24 +256,24 @@ namespace LicnaKarta.Controllers
             return View(zahtev);
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Obrisi")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult PotvrdiBrisanje(int id)
         {
             if (Session["Uloga"] == null || Session["Uloga"].ToString() != "Administrator")
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Spisak");
             }
 
             zahtevRepozitorijum.Obrisi(id);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Spisak");
         }
 
         public ActionResult Stampa(int id)
         {
-            TehnoloskaObradaZahteva obrada = new TehnoloskaObradaZahteva();
-            DataTable podaciZaStampu = obrada.DajZahtevZaStampu(id);
+            TehnoloskaObradaZahteva tehnoloskaObrada = new TehnoloskaObradaZahteva();
+            DataTable podaciZaStampu = tehnoloskaObrada.DajZahtevZaStampu(id);
 
             Zahtev zahtev = zahtevRepozitorijum.DajPoId(id);
 
@@ -289,8 +289,8 @@ namespace LicnaKarta.Controllers
 
         public ActionResult ParametarskaStampa(string status)
         {
-            TehnoloskaObradaZahteva obrada = new TehnoloskaObradaZahteva();
-            DataTable podaciZaStampu = obrada.DajZahteveZaStampuPoStatusu(status);
+            TehnoloskaObradaZahteva tehnoloskaObrada = new TehnoloskaObradaZahteva();
+            DataTable podaciZaStampu = tehnoloskaObrada.DajZahteveZaStampuPoStatusu(status);
 
             var zahtevi = db.Zahtevs
                 .Include(z => z.Gradjanin)
@@ -303,26 +303,26 @@ namespace LicnaKarta.Controllers
             return View("ParametarskaStampa", zahtevi);
         }
 
-        private void ValidirajZahtev(ZahtevPrikazModel model)
+        private void ValidirajZahtev(ZahtevPrikazModel prikazModel)
         {
-            if (!model.DatumRodjenja.HasValue)
+            if (!prikazModel.DatumRodjenja.HasValue)
             {
                 ModelState.AddModelError("DatumRodjenja", "Datum rođenja je obavezan.");
                 return;
             }
 
-            if (model.DatumRodjenja.Value > DateTime.Today)
+            if (prikazModel.DatumRodjenja.Value > DateTime.Today)
             {
                 ModelState.AddModelError("DatumRodjenja", "Datum rođenja ne može biti u budućnosti.");
             }
 
-            if (model.DatumRodjenja.Value < new DateTime(1900, 1, 1))
+            if (prikazModel.DatumRodjenja.Value < new DateTime(1900, 1, 1))
             {
                 ModelState.AddModelError("DatumRodjenja", "Datum rođenja nije ispravan.");
             }
 
             bool postojiAktivanZahtev = db.Zahtevs.Any(z =>
-                z.JMBGGradjanina == model.JMBG &&
+                z.JMBGGradjanina == prikazModel.JMBG &&
                 (z.StatusZahteva == "Podnet" || z.StatusZahteva == "Odobren"));
 
             if (postojiAktivanZahtev)
@@ -338,7 +338,7 @@ namespace LicnaKarta.Controllers
                 "Oštećenje"
             };
 
-            if (!dozvoljeniRazlozi.Contains(model.RazlogIzdavanja))
+            if (!dozvoljeniRazlozi.Contains(prikazModel.RazlogIzdavanja))
             {
                 ModelState.AddModelError("RazlogIzdavanja",
                     "Razlog izdavanja mora biti: Prvo izdavanje, Zamena, Gubitak ili Oštećenje.");
@@ -350,101 +350,101 @@ namespace LicnaKarta.Controllers
                 "Hitan"
             };
 
-            if (!dozvoljeniTipovi.Contains(model.TipZahteva))
+            if (!dozvoljeniTipovi.Contains(prikazModel.TipZahteva))
             {
                 ModelState.AddModelError("TipZahteva",
                     "Tip zahteva mora biti Redovan ili Hitan.");
             }
 
-            bool potrebanRoditelj = poslovnaPravilaService
-                .DaLiSuPotrebniPodaciRoditelja(model.DatumRodjenja.Value);
+            bool potrebanRoditelj = poslovnaPravilaServisi
+                .DaLiSuPotrebniPodaciRoditelja(prikazModel.DatumRodjenja.Value);
 
             if (potrebanRoditelj)
             {
-                if (string.IsNullOrWhiteSpace(model.RoditeljImePrezime) ||
-                    string.IsNullOrWhiteSpace(model.RoditeljJMBG) ||
-                    string.IsNullOrWhiteSpace(model.Srodstvo) ||
-                    !model.SaglasnostRoditelja)
+                if (string.IsNullOrWhiteSpace(prikazModel.RoditeljImePrezime) ||
+                    string.IsNullOrWhiteSpace(prikazModel.RoditeljJMBG) ||
+                    string.IsNullOrWhiteSpace(prikazModel.Srodstvo) ||
+                    !prikazModel.SaglasnostRoditelja)
                 {
                     ModelState.AddModelError("",
                         "Za maloletno lice obavezni su podaci roditelja/staratelja i saglasnost.");
                 }
             }
 
-            if (!model.IzvodIzMaticneKnjigeRodjenih)
+            if (!prikazModel.IzvodIzMaticneKnjigeRodjenih)
             {
                 ModelState.AddModelError("IzvodIzMaticneKnjigeRodjenih",
                     "Izvod iz matične knjige rođenih je obavezan.");
             }
 
-            if (!model.UverenjeODrzavljanstvu)
+            if (!prikazModel.UverenjeODrzavljanstvu)
             {
                 ModelState.AddModelError("UverenjeODrzavljanstvu",
                     "Uverenje o državljanstvu je obavezno.");
             }
 
-            if (!model.DokazOPrebivalistu)
+            if (!prikazModel.DokazOPrebivalistu)
             {
                 ModelState.AddModelError("DokazOPrebivalistu",
                     "Dokaz o prebivalištu je obavezan.");
             }
 
-            if (!model.DokazOUplatiTakse)
+            if (!prikazModel.DokazOUplatiTakse)
             {
                 ModelState.AddModelError("DokazOUplatiTakse",
                     "Dokaz o uplati takse je obavezan.");
             }
         }
 
-        private void DodajDokumentaciju(int idZahteva, ZahtevPrikazModel model)
+        private void DodajDokumentaciju(int idZahteva, ZahtevPrikazModel prikazModel)
         {
             db.Dokumentacijas.Add(new Dokumentacija
             {
                 IDZahteva = idZahteva,
                 NazivDokumenta = "Izvod iz matične knjige rođenih",
-                Dostavljeno = model.IzvodIzMaticneKnjigeRodjenih
+                Dostavljeno = prikazModel.IzvodIzMaticneKnjigeRodjenih
             });
 
             db.Dokumentacijas.Add(new Dokumentacija
             {
                 IDZahteva = idZahteva,
                 NazivDokumenta = "Uverenje o državljanstvu",
-                Dostavljeno = model.UverenjeODrzavljanstvu
+                Dostavljeno = prikazModel.UverenjeODrzavljanstvu
             });
 
             db.Dokumentacijas.Add(new Dokumentacija
             {
                 IDZahteva = idZahteva,
                 NazivDokumenta = "Dokaz o prebivalištu",
-                Dostavljeno = model.DokazOPrebivalistu
+                Dostavljeno = prikazModel.DokazOPrebivalistu
             });
 
             db.Dokumentacijas.Add(new Dokumentacija
             {
                 IDZahteva = idZahteva,
                 NazivDokumenta = "Stara lična karta",
-                Dostavljeno = model.StaraLicnaKarta
+                Dostavljeno = prikazModel.StaraLicnaKarta
             });
 
             db.Dokumentacijas.Add(new Dokumentacija
             {
                 IDZahteva = idZahteva,
                 NazivDokumenta = "Dokaz o uplati takse",
-                Dostavljeno = model.DokazOUplatiTakse
+                Dostavljeno = prikazModel.DokazOUplatiTakse
             });
 
             db.Dokumentacijas.Add(new Dokumentacija
             {
                 IDZahteva = idZahteva,
                 NazivDokumenta = "Fotografija",
-                Dostavljeno = model.Fotografija
+                Dostavljeno = prikazModel.Fotografija
             });
 
             db.Dokumentacijas.Add(new Dokumentacija
             {
                 IDZahteva = idZahteva,
                 NazivDokumenta = "Saglasnost roditelja/staratelja",
-                Dostavljeno = model.SaglasnostRoditelja
+                Dostavljeno = prikazModel.SaglasnostRoditelja
             });
         }
     }

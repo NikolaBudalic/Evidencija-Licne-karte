@@ -218,20 +218,20 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Pocetna\OAplikaciji.cshtml" />
     <Content Include="Views\Pocetna\Kontakt.cshtml" />
-    <Content Include="Views\Pocetna\Index.cshtml" />
-    <Content Include="Views\Zahtev\Create.cshtml" />
-    <Content Include="Views\Zahtev\Index.cshtml" />
-    <Content Include="Views\Zahtev\Details.cshtml" />
-    <Content Include="Views\Zahtev\Delete.cshtml" />
-    <Content Include="Views\Zahtev\Edit.cshtml" />
     <Content Include="Views\Nalog\Prijava.cshtml" />
     <Content Include="Views\Zahtev\Stampa.cshtml" />
     <Content Include="Views\Zahtev\ParametarskaStampa.cshtml" />
-    <Content Include="Views\Gradjanin\Index.cshtml" />
-    <Content Include="Views\Gradjanin\Details.cshtml" />
-    <Content Include="Views\Gradjanin\Create.cshtml" />
-    <Content Include="Views\Gradjanin\Edit.cshtml" />
-    <Content Include="Views\Gradjanin\Delete.cshtml" />
+    <Content Include="Views\Gradjanin\Detalji.cshtml" />
+    <Content Include="Views\Gradjanin\Dodaj.cshtml" />
+    <Content Include="Views\Gradjanin\Izmeni.cshtml" />
+    <Content Include="Views\Gradjanin\Obrisi.cshtml" />
+    <Content Include="Views\Gradjanin\Spisak.cshtml" />
+    <Content Include="Views\Pocetna\Pocetna.cshtml" />
+    <Content Include="Views\Zahtev\Detalji.cshtml" />
+    <Content Include="Views\Zahtev\Dodaj.cshtml" />
+    <Content Include="Views\Zahtev\Izmeni.cshtml" />
+    <Content Include="Views\Zahtev\Obrisi.cshtml" />
+    <Content Include="Views\Zahtev\Spisak.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

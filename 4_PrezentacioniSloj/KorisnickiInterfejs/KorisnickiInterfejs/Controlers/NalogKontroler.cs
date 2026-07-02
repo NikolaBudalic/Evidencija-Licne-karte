@@ -39,7 +39,7 @@ namespace LicnaKarta.Controllers
             Session["Prezime"] = korisnik.Prezime;
             Session["Uloga"] = korisnik.Uloga;
 
-            return RedirectToAction("Index", "Zahtev");
+            return RedirectToAction("Spisak", "Zahtev");
         }
 
         public ActionResult Odjava()

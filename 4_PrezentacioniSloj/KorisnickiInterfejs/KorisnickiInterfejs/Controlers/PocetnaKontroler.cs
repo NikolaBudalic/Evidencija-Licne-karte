@@ -1,28 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace LicnaKarta.Controllers
 {
     public class PocetnaController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Pocetna()
         {
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult OAplikaciji()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Stranica sa osnovnim informacijama o aplikaciji.";
 
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Kontakt()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Stranica sa kontakt informacijama.";
 
             return View();
         }

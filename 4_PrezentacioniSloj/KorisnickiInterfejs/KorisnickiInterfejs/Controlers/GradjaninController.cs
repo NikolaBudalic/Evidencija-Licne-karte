@@ -19,28 +19,28 @@ namespace LicnaKarta.Controllers
             tehnoloskaObradaGradjana = new TehnoloskaObradaGradjana();
         }
 
-        public ActionResult Index(string filter)
+        public ActionResult Spisak(string pretraga)
         {
             var gradjani = gradjaninRepozitorijum.DajSve();
 
-            if (!string.IsNullOrWhiteSpace(filter))
+            if (!string.IsNullOrWhiteSpace(pretraga))
             {
-                tehnoloskaObradaGradjana.DajGradjanePoFilteru(filter);
+                tehnoloskaObradaGradjana.DajGradjanePoFilteru(pretraga);
 
                 gradjani = gradjani
                     .Where(g =>
-                        g.JMBG.Contains(filter) ||
-                        g.Ime.Contains(filter) ||
-                        g.Prezime.Contains(filter))
+                        g.JMBG.Contains(pretraga) ||
+                        g.Ime.Contains(pretraga) ||
+                        g.Prezime.Contains(pretraga))
                     .ToList();
             }
 
-            ViewBag.Filter = filter;
+            ViewBag.Filter = pretraga;
 
             return View(gradjani);
         }
 
-        public ActionResult Details(string id)
+        public ActionResult Detalji(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -57,14 +57,14 @@ namespace LicnaKarta.Controllers
             return View(gradjanin);
         }
 
-        public ActionResult Create()
+        public ActionResult Dodaj()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Gradjanin gradjanin)
+        public ActionResult Dodaj(Gradjanin gradjanin)
         {
             ValidirajGradjanina(gradjanin, true);
 
@@ -75,10 +75,10 @@ namespace LicnaKarta.Controllers
 
             gradjaninRepozitorijum.Dodaj(gradjanin);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Spisak");
         }
 
-        public ActionResult Edit(string id)
+        public ActionResult Izmeni(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -97,7 +97,7 @@ namespace LicnaKarta.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Gradjanin gradjanin)
+        public ActionResult Izmeni(Gradjanin gradjanin)
         {
             ValidirajGradjanina(gradjanin, false);
 
@@ -108,10 +108,10 @@ namespace LicnaKarta.Controllers
 
             gradjaninRepozitorijum.Izmeni(gradjanin);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Spisak");
         }
 
-        public ActionResult Delete(string id)
+        public ActionResult Obrisi(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -130,7 +130,7 @@ namespace LicnaKarta.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        public ActionResult PotvrdiBrisanje(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -139,7 +139,7 @@ namespace LicnaKarta.Controllers
 
             gradjaninRepozitorijum.Obrisi(id);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Spisak");
         }
 
         private void ValidirajGradjanina(Gradjanin gradjanin, bool proveriDuplikat)
